@@ -1,7 +1,8 @@
 # The publishers' settings where they differ from ours, to test what explains the gaps to the published
-# numbers: Qwen2.5-0.5B ARC-Challenge 25-shot and GSM8K 4-shot, Qwen3-0.6B-Base MMLU 5-shot, and the
-# instruct models' GSM8K with their chat template (few-shot examples as earlier turns). Each group runs
-# only on the model it tests; GSM8K on the same first 100 questions as models.yaml.
+# numbers: Qwen2.5-0.5B ARC-Challenge 25-shot, Qwen3-0.6B-Base MMLU 5-shot, GSM8K 4-shot with lm_eval's
+# standard and chain-of-thought prompts for both Qwen base models (first 300 questions), and the instruct
+# models' GSM8K with their chat template (few-shot examples as earlier turns; the first 100 questions, as
+# in models.yaml). Each group runs only on the models it tests.
 #   python scripts/bench.py run -c configs/benchmarks/cards.yaml --slots 2
 name: cards
 out_dir: runs/benchmarks
@@ -9,9 +10,9 @@ batch_size: 4
 device: auto
 models:
   - {name: Qwen2.5-0.5B,          hf: Qwen/Qwen2.5-0.5B,                    dtype: float32, skip_groups: [mmlu_5shot]}
-  - {name: Qwen3-0.6B-Base,       hf: Qwen/Qwen3-0.6B-Base,                 dtype: float32, skip_groups: [arc_challenge_25shot, gsm8k_4shot]}
-  - {name: SmolLM2-360M-Instruct, hf: HuggingFaceTB/SmolLM2-360M-Instruct,  dtype: float32, chat: true, skip_groups: [arc_challenge_25shot, gsm8k_4shot, mmlu_5shot]}
-  - {name: Qwen2.5-0.5B-Instruct, hf: Qwen/Qwen2.5-0.5B-Instruct,           dtype: float32, chat: true, skip_groups: [arc_challenge_25shot, gsm8k_4shot, mmlu_5shot]}
+  - {name: Qwen3-0.6B-Base,       hf: Qwen/Qwen3-0.6B-Base,                 dtype: float32, skip_groups: [arc_challenge_25shot]}
+  - {name: SmolLM2-360M-Instruct, hf: HuggingFaceTB/SmolLM2-360M-Instruct,  dtype: float32, chat: true, skip_groups: [arc_challenge_25shot, gsm8k_4shot, gsm8k_cot_4shot, mmlu_5shot]}
+  - {name: Qwen2.5-0.5B-Instruct, hf: Qwen/Qwen2.5-0.5B-Instruct,           dtype: float32, chat: true, skip_groups: [arc_challenge_25shot, gsm8k_4shot, gsm8k_cot_4shot, mmlu_5shot]}
 task_groups:
   arc_challenge_25shot:
     tasks: [arc_challenge]
@@ -19,7 +20,11 @@ task_groups:
   gsm8k_4shot:
     tasks: [gsm8k]
     num_fewshot: 4
-    limit: 100
+    limit: 300
+  gsm8k_cot_4shot:
+    tasks: [gsm8k_cot]
+    num_fewshot: 4
+    limit: 300
   mmlu_5shot:
     tasks: [mmlu]
     num_fewshot: 5

@@ -26,7 +26,7 @@ def evaluation():
     fig, (a, b) = plt.subplots(1, 2, figsize=(7.2, 3.1), gridspec_kw={"width_ratios": [1, 2.6]})
     x = np.arange(len(BASE_MODELS))
     v = [S["bpb"][m]["val_bpb"] for m in BASE_MODELS]
-    a.bar(x, v, color=[COL[i] for i in range(len(x))])
+    a.scatter(x, v, color=[COL[i] for i in range(len(x))], s=28, zorder=2)
     a.scatter(x, [S["bpb"][m]["tutorial"] for m in BASE_MODELS], marker="_", s=120, color="k", zorder=3,
               label="tutorial value")
     a.set_xticks(x, [SHORT[m] for m in BASE_MODELS], rotation=40, ha="right")
@@ -42,7 +42,7 @@ def evaluation():
         b.bar(xs, [r[t]["acc"] for t in tasks], w, yerr=[r[t]["se"] for t in tasks], color=COL[i], capsize=1.2,
               error_kw={"lw": 0.6}, label=SHORT[m])
         b.scatter(xs, [S["benchmarks_full"][m][t]["acc"] for t in tasks], marker="_", s=30, color="k", lw=1,
-                  zorder=3, label="full test set" if i == 0 else None)
+                  zorder=3, label="full set" if i == 0 else None)
     for j, t in enumerate(tasks):
         c = S["benchmarks"][BASE_MODELS[0]][t]["chance"]
         b.hlines(c, j - 0.45, j + 0.45, color="k", ls="--", lw=0.8, label="chance" if j == 0 else None)
@@ -62,8 +62,9 @@ def bench_delta_panel(ax, block, keys, labels, title):
     for i, k in enumerate(keys):
         xs = np.arange(len(tasks)) + (i - (len(keys) - 1) / 2) * w
         d = [block[k][t]["diff"] for t in tasks]
-        ax.bar(xs, [100 * x["mean"] for x in d], w, yerr=[100 * x["std"] for x in d], color=COL[i], capsize=1.5,
-               error_kw={"lw": 0.6}, label=labels[i])
+        m = np.array([100 * x["mean"] for x in d])
+        ci = np.array([[100 * block[k][t]["boot_ci95"][0] for t in tasks], [100 * block[k][t]["boot_ci95"][1] for t in tasks]])
+        ax.bar(xs, m, w, yerr=[m - ci[0], ci[1] - m], color=COL[i], capsize=1.5, error_kw={"lw": 0.6}, label=labels[i])
     ax.axhline(0, color="k", lw=0.6)
     ax.set_xticks(range(len(tasks)), [TASKS[t][1].replace("ARC-Challenge", "ARC-C").replace("ARC-Easy", "ARC-E") for t in tasks])
     ax.set_ylabel("tuned minus untuned (points)")
@@ -87,7 +88,7 @@ def sft():
     a.set_title("(a) Held-out answer loss, 5 seeds", loc="left")
     a.legend(frameon=False)
     bench_delta_panel(b, T["benchmarks"], [f"n{n}" for n in SFT_SIZES], [f"{n:,} examples" for n in SFT_SIZES],
-                      "(b) Benchmark change, mean ± std over 5 seeds")
+                      "(b) Benchmark change (95% intervals)")
     fig.tight_layout()
     fig.savefig(OUT / "sft.png", dpi=200)
     plt.close(fig)
@@ -115,7 +116,7 @@ def dpo():
         ax.set_xlabel("preference pairs seen")
         ax.set_title(t, loc="left")
     axes[0].legend(frameon=False)
-    fig.suptitle("DPO of Qwen2.5-0.5B-Instruct on 100 held-out pairs, mean ± std over 5 seeds", fontsize=8.5, x=0.01, ha="left")
+    fig.suptitle("DPO of Qwen2.5-0.5B-Instruct on 100 held-out pairs, mean over 5 seeds (± std shaded in a, b)", fontsize=8.5, x=0.01, ha="left")
     fig.tight_layout()
     fig.savefig(OUT / "dpo.png", dpi=200)
     plt.close(fig)

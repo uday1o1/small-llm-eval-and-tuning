@@ -74,6 +74,14 @@ def pairwise(cfg, models):
                 r = mcnemar(sc[a][t][0], sc[b][t][0])
                 rows.append({"a": a, "b": b, **r})
         out[t] = {"pairs": rows, "resolved_p05": sum(r["p"] < 0.05 for r in rows), "n_pairs": len(rows)}
+    # Holm's correction over all tests of the table (every pair on every task)
+    allp = sorted((r["p"], t, i) for t in TASKS for i, r in enumerate(out[t]["pairs"]))
+    m, stop = len(allp), False
+    for k, (pv, t, i) in enumerate(allp):
+        stop = stop or pv > 0.05 / (m - k)
+        out[t]["pairs"][i]["holm_reject"] = not stop
+    for t in TASKS:
+        out[t]["resolved_holm"] = sum(r["holm_reject"] for r in out[t]["pairs"])
     return out
 
 
@@ -228,16 +236,20 @@ def gen_stats(gens):
 def vs_base_gens(recs, base_gens, short=20):
     """Per prompt, tuned against untuned (same prompts, same order): the share of answers that got longer;
     and on the prompts the untuned model answers in at most `short` tokens, how often the tuned answer's
-    first line starts with the untuned answer (its first 20 characters) and how often it is over twice as long."""
+    first line starts with the untuned answer (its first 20 characters), how often such a kept answer got
+    longer, and how often the tuned answer is over twice as long."""
     first = lambda a: a.strip().split("\n")[0].strip()
     idx = [i for i, g in enumerate(base_gens) if g["tokens"] <= short]
-    longer, kept, doubled = [], [], []
+    longer, kept, kept_longer, doubled = [], [], [], []
     for x in recs:
         assert [g["prompt"] for g in x["gens"]] == [g["prompt"] for g in base_gens]
         longer.append(float(np.mean([a["tokens"] > b["tokens"] for a, b in zip(x["gens"], base_gens)])))
-        kept.append(sum(first(x["gens"][i]["answer"]).startswith(first(base_gens[i]["answer"])[:20]) for i in idx))
+        k = [i for i in idx if first(x["gens"][i]["answer"]).startswith(first(base_gens[i]["answer"])[:20])]
+        kept.append(len(k))
+        kept_longer.append(sum(x["gens"][i]["tokens"] > base_gens[i]["tokens"] for i in k))
         doubled.append(sum(x["gens"][i]["tokens"] > 2 * base_gens[i]["tokens"] for i in idx))
-    return {"longer": describe(longer), "n_short": len(idx), "short_kept": kept, "short_doubled": doubled}
+    return {"longer": describe(longer), "n_short": len(idx), "short_kept": kept, "short_kept_longer": kept_longer,
+            "short_doubled": doubled}
 
 
 def bench_deltas(cfg, base_cfg, base_model, names, n_boot=2000):
@@ -262,7 +274,10 @@ def bench_deltas(cfg, base_cfg, base_model, names, n_boot=2000):
             q = np.mean(dq[t], axis=0)                                   # per question, mean over seeds
             boot = np.array([q[rng.integers(0, len(q), len(q))].mean() for _ in range(n_boot)])
             lo, hi = np.percentile(boot, [2.5, 97.5])
+            dm = float(np.mean([r["diff"] for r in v]))
+            passes = bool(abs(dm) >= 2 * float(np.std([r["diff"] for r in v], ddof=1)) and (lo > 0 or hi < 0))
             out[name][t] = {"diff": describe([r["diff"] for r in v]), "mcnemar_p": [r["p"] for r in v],
+                            "passes_rule": passes,
                             "se_diff": [r["se_diff"] for r in v], "n_questions": int(len(q)),
                             "boot_ci95": [float(lo), float(hi)], "boot_se": float(boot.std(ddof=1)),
                             "base_acc": float(base[t][0].mean())}
@@ -322,7 +337,8 @@ def dpo():
                 c["prefers"].append(e["val_policy_prefers_chosen"])
         beta = r[0]["posthoc"]["beta"]
         # the held-out set starts with the run's own 100 validation pairs; re-evaluated in batches of 4 instead of
-        # nanolm's 2, they agree up to padding and TF32 rounding (a pair at margin ~0 can flip: 0.01 of accuracy)
+        # nanolm's 2, they agree up to floating-point differences (different padding per batch; a pair at margin ~0
+        # can flip: 0.01 of accuracy)
         rc_acc = max(abs(x["posthoc"]["first100_reward_acc"] - x["metrics"]["after_val_reward_acc"]) for x in r)
         rc_margin = max(abs(x["posthoc"]["first100_reward_margin"] - x["metrics"]["after_val_reward_margin"]) for x in r)
         assert rc_acc <= 0.01 + 1e-9 and rc_margin < 0.005, (k, rc_acc, rc_margin)
@@ -369,6 +385,8 @@ def dpo():
     for k in keys:
         out[k]["longer_than_base"] = vs_base_gens(recs[k], bg)
     out["pair_lengths"] = json.loads(open(RUNS / "dpo" / "pair_lengths.json").read())
+    out["dlogp_rejected_over_chosen"] = {k: out[k]["heldout"]["dlogp_per_token_rejected"]["mean"] /
+                                         out[k]["heldout"]["dlogp_per_token_chosen"]["mean"] for k in keys}
     out["benchmarks"] = bench_deltas("dpo", "models", "Qwen2.5-0.5B-Instruct", keys)
     return out
 
@@ -376,7 +394,7 @@ def dpo():
 # --------------------------------------------------------------- first 300 questions vs full set
 def subset_vs_full():
     """Is the first-300 subset (first 300 per MMLU subject, first 100 of GSM8K) representative of the
-    whole test set? Accuracy on both, and the subset's distance from the full value in units of the
+    whole evaluation set (HellaSwag: validation)? Accuracy on both, and the subset's distance from the full value in units of the
     subset's standard error (finite-population corrected: the subset is part of the full set)."""
     out = {}
     for m in BASE_MODELS:
@@ -442,7 +460,7 @@ MODEL_CARDS = {
 
 
 def model_cards(full, subset, cl):
-    """Our score next to each published one: full test set for base models (the first-300 subset for
+    """Our score next to each published one: every question for base models (the first-300 subset for
     the instruct models, which ran only there); ARC average = mean of Easy and Challenge; MMLU cloze
     = lm_eval's mmlu_continuation acc_norm."""
     out = {}
@@ -467,18 +485,42 @@ def model_cards(full, subset, cl):
 def cards():
     """Each publisher setting that differs from ours (configs/benchmarks/cards.yaml), against our setting on
     the same questions (McNemar). Each model's groups in cards.yaml run different tasks, so one per-question
-    table per model holds them all."""
-    tests = {"Qwen2.5-0.5B ARC-Challenge 25-shot vs 0-shot": ("Qwen2.5-0.5B", "arc_challenge", ("cards", "arc_challenge_25shot"), ("full", None)),
-             "Qwen2.5-0.5B GSM8K 4-shot vs 5-shot": ("Qwen2.5-0.5B", "gsm8k", ("cards", "gsm8k_4shot"), ("models", None)),
-             "Qwen3-0.6B-Base MMLU 5-shot vs 0-shot": ("Qwen3-0.6B-Base", "mmlu", ("cards", "mmlu_5shot"), ("full", None)),
-             "SmolLM2-360M-Instruct GSM8K chat template vs none": ("SmolLM2-360M-Instruct", "gsm8k", ("cards", "gsm8k_chat"), ("models", None)),
-             "Qwen2.5-0.5B-Instruct GSM8K chat template vs none": ("Qwen2.5-0.5B-Instruct", "gsm8k", ("cards", "gsm8k_chat"), ("models", None))}
+    table per model holds them all; GSM8K is scored with lm_eval's flexible-extract filter throughout."""
+    def gsm(cfg, m, task, n=None):
+        d = pd.read_csv(RUNS / "benchmarks" / cfg / m / "items.csv.gz")
+        d = d[(d.task == task) & (d["filter"] == GSM8K_FILTER)].sort_values("doc_id")
+        return d.exact_match.to_numpy(float)[:n]
+    tests = {"Qwen2.5-0.5B ARC-Challenge 25-shot vs 0-shot": ("Qwen2.5-0.5B", "arc_challenge", ("cards", "arc_challenge"), ("full", None)),
+             "Qwen3-0.6B-Base MMLU 5-shot vs 0-shot": ("Qwen3-0.6B-Base", "mmlu", ("cards", "mmlu"), ("full", None)),
+             "SmolLM2-360M-Instruct GSM8K chat template vs none": ("SmolLM2-360M-Instruct", "gsm8k", ("cards", "gsm8k"), ("models", None)),
+             "Qwen2.5-0.5B-Instruct GSM8K chat template vs none": ("Qwen2.5-0.5B-Instruct", "gsm8k", ("cards", "gsm8k"), ("models", None))}
+    for m in ("Qwen2.5-0.5B", "Qwen3-0.6B-Base"):
+        tests[f"{m} GSM8K 4-shot vs 5-shot"] = (m, "gsm8k", ("cards", "gsm8k"), ("full", 300))
+        tests[f"{m} GSM8K 4-shot chain of thought vs 5-shot"] = (m, "gsm8k", ("cards", "gsm8k_cot"), ("full", 300))
     out = {}
-    for name, (m, t, (c1, g1), (c0, _)) in tests.items():
-        y1, y0 = task_scores(items(c1, m))[t][0], task_scores(items(c0, m))[t][0]
-        assert len(y1) == len(y0)
+    for name, (m, t, (c1, t1), (c0, n0)) in tests.items():
+        if t == "gsm8k":
+            y1, y0 = gsm(c1, m, t1), gsm(c0, m, "gsm8k", n0)
+        else:
+            y1, y0 = task_scores(items(c1, m))[t][0], task_scores(items(c0, m))[t][0]
+        assert len(y1) == len(y0), name
         out[name] = {"model": m, "task": t, "n": int(len(y1)), "publisher_setting": float(y1.mean()),
                      "ours": float(y0.mean()), **mcnemar(y0, y1)}
+    return out
+
+
+def gsm8k_filters():
+    """GSM8K exact match under lm_eval's two answer filters (strict-match needs the '#### <number>' format,
+    flexible-extract takes the last number), for the base and instruct models and every tuned adapter."""
+    def acc(cfg, m, flt):
+        d = pd.read_csv(RUNS / "benchmarks" / cfg / m / "items.csv.gz")
+        return float(d[(d.task == "gsm8k") & (d["filter"] == flt)].exact_match.mean())
+    out = {}
+    for cfg, names in (("models", BASE_MODELS + ["SmolLM2-360M-Instruct", "Qwen2.5-0.5B-Instruct"]),
+                       ("sft", [f"n{n}_s{s}" for n in SFT_SIZES for s in SEEDS]),
+                       ("dpo", [f"beta{b}_s{s}" for b in DPO_BETAS for s in SEEDS])):
+        for m in names:
+            out[f"{cfg}/{m}"] = {f: acc(cfg, m, f) for f in ("strict-match", "flexible-extract")}
     return out
 
 
@@ -544,6 +586,7 @@ def architecture():
     c = h["config"]
     out["hybrid_if_all_full"] = {"kv_bytes_per_token": h["kv_bytes_per_token"] * c["n_layers"] // c["n_full_attention"]}
     out["hybrid_if_all_full"]["state_bytes_262k"] = out["hybrid_if_all_full"]["kv_bytes_per_token"] * 262144
+    out["hybrid_if_all_full"]["ratio_to_hybrid_262k"] = out["hybrid_if_all_full"]["state_bytes_262k"] / h["state_bytes_262k"]
     # per generated token at context T: weight matmuls (2 FLOPs per weight of every layer and of the
     # output head; the input embedding is a lookup) against the attention over the cache (4 x heads x
     # head dim per full-attention layer per cached token: q.k and the weighted sum of v)
@@ -557,7 +600,7 @@ def architecture():
 # ------------------------------------------------------------------------------- compute
 def compute():
     """Recorded GPU time: nanolm's eval/train times and lm_eval's total evaluation time per run (runs
-    shared the GPU two to four at a time, so these overlap and sum to more than the elapsed time)."""
+    shared the GPU up to four at a time, so these overlap and sum to more than the elapsed time)."""
     ft = {k: sum(json.loads(open(f).read())["train_time_sec"] for f in glob.glob(str(RUNS / k / "*_s*" / "metrics.json")))
           for k in ("sft", "dpo")}
     n_ft = {k: len(glob.glob(str(RUNS / k / "*_s*" / "metrics.json"))) for k in ("sft", "dpo")}
@@ -589,7 +632,7 @@ def main():
                "benchmarks": bench_table("models", models), "benchmarks_full": bench_table("full", BASE_MODELS),
                "pairwise_subset": pairwise("models", BASE_MODELS), "pairwise_full": pairwise("full", BASE_MODELS),
                "laptop_reproduction": laptop_reproduction(), "mmlu_cloze": cloze(), "mmlu_cloze_pairs": cloze_pairs(),
-               "subset_vs_full": subset_vs_full(), "hellaswag_sources": hellaswag_sources(), "mmlu_letters": mmlu_letters(), "architecture": architecture(), "provenance": provenance(), "compute": compute(), "cards": cards(), "token_budget": token_budget(),
+               "subset_vs_full": subset_vs_full(), "hellaswag_sources": hellaswag_sources(), "mmlu_letters": mmlu_letters(), "architecture": architecture(), "provenance": provenance(), "compute": compute(), "cards": cards(), "gsm8k_filters": gsm8k_filters(), "token_budget": token_budget(),
                "sft": sft(), "dpo": dpo()}
     summary["model_cards"] = model_cards(summary["benchmarks_full"], summary["benchmarks"], summary["mmlu_cloze"])
     save(summary, ROOT / "results" / "summary.json")

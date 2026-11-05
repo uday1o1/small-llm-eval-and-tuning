@@ -1,4 +1,4 @@
-# The tasks of models.yaml on every question of each test set (no limit), base models only: how far
+# The tasks of models.yaml on every question of each evaluation set (HellaSwag: validation; no limit), base models only: how far
 # are the first-300 subsets from the full-set scores?
 #   python scripts/bench.py run -c configs/benchmarks/full.yaml --slots 4
 name: full
