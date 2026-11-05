@@ -57,10 +57,10 @@ On every question of each evaluation set (HellaSwag: the validation set), with M
 | Qwen3-0.6B-Base GSM8K, 4-shot chain of thought vs 5-shot | 300 | 0.530 | 0.610 (p = 0.0071) | 0.596 |
 | SmolLM2-360M-Instruct GSM8K, chat template vs none | 100 | 0.020 | 0.070 (p = 0.18) | 0.0743 |
 | Qwen2.5-0.5B-Instruct GSM8K, chat template vs none | 100 | 0.340 | 0.360 (p = 0.85) | 0.496 |
-| SmolLM2-360M-Instruct GSM8K, chat template and chain of thought vs none | 100 | 0.020 | 0.060 (p = 0.22) | 0.0743 |
-| Qwen2.5-0.5B-Instruct GSM8K, chat template and chain of thought vs none | 100 | 0.340 | 0.390 (p = 0.44) | 0.496 |
+| SmolLM2-360M-Instruct GSM8K, chat template and 4-shot chain of thought vs none | 100 | 0.020 | 0.060 (p = 0.22) | 0.0743 |
+| Qwen2.5-0.5B-Instruct GSM8K, chat template and 4-shot chain of thought vs none | 100 | 0.340 | 0.390 (p = 0.44) | 0.496 |
 
-GSM8K uses lm_eval's prompts on the first 300 questions (base models) or 100 (instruct models). Qwen3 states a chain-of-thought prompt, Qwen2.5's report gives only "4-shot", so both of lm_eval's 4-shot prompts are run. Qwen states no setting for its instruct model, so that model runs with the chat template, as SmolLM2's evaluation does, with and without chain of thought. Few-shot prompts close most of the ARC-Challenge and MMLU gaps and the chain-of-thought prompt the base models' GSM8K gaps; the shot count alone and the chat template resolve nothing, and Qwen2.5-0.5B-Instruct's published GSM8K stays unexplained (0.39 with the chat template and chain of thought, p = 0.44, against 0.496).
+GSM8K uses lm_eval's prompts on the first 300 questions (base models) or 100 (instruct models). Qwen3 states a chain-of-thought prompt, Qwen2.5's report gives only "4-shot", so both of lm_eval's 4-shot prompts are run. Qwen states no setting for its instruct model, so that model runs with the chat template, as SmolLM2's evaluation does, with lm_eval's 5-shot prompt and with its 4-shot chain-of-thought prompt. Few-shot prompts move ARC-Challenge and MMLU toward the published values and the chain-of-thought prompt does the same for the base models' GSM8K, while the shot count alone and the chat template do not; the p values are McNemar, uncorrected, and with Holm's correction over these 10 tests only the MMLU change is resolved. Qwen2.5-0.5B-Instruct's published GSM8K stays unexplained (0.39 with the chat template and chain of thought, p = 0.44, against 0.496).
 
 ### The scoring rule (ARC-Easy)
 
@@ -160,4 +160,4 @@ python analysis/figures.py     # figures/*.png (no GPU)
 - **Evaluation.** 0-shot log-likelihood scoring (GSM8K: 5-shot generation, exact match with lm_eval's flexible-extract filter), without chat templates or chain of thought except in the publisher-setting test; every question of each evaluation set and the cloze form only for the base models; GSM8K comparisons of the instruct models and tuned adapters on 100 questions.
 - **Samples.** Judged by counts over 50 held-out prompts and by reading, not by a reward model or human raters.
 - **Statistics.** Paired t-tests over 5 seeds, McNemar tests and question-bootstrap intervals, without correction for multiple comparisons (`summary.json` also gives Holm-corrected counts for the model pairs).
-- **Models.** Up to 0.36B parameters the models are GPT-2 and SmolLM2, from 0.49B up Qwen, so size and model family are confounded.
+- **Models.** Below 0.4B parameters the models are GPT-2 and SmolLM2, from 0.49B up Qwen, so size and model family are confounded.

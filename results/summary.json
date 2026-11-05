@@ -3615,7 +3615,8 @@
    "se_diff": 0.011740411502275954,
    "a_only": 81,
    "b_only": 109,
-   "p": 0.04985144161687199
+   "p": 0.04985144161687199,
+   "holm_reject": false
   },
   "Qwen3-0.6B-Base MMLU 5-shot vs 0-shot": {
    "model": "Qwen3-0.6B-Base",
@@ -3627,7 +3628,8 @@
    "se_diff": 0.0036582633224684184,
    "a_only": 1187,
    "b_only": 1457,
-   "p": 1.6426492366602977e-07
+   "p": 1.6426492366602977e-07,
+   "holm_reject": true
   },
   "SmolLM2-360M-Instruct GSM8K chat template vs none": {
    "model": "SmolLM2-360M-Instruct",
@@ -3639,7 +3641,8 @@
    "se_diff": 0.02958039891549808,
    "a_only": 2,
    "b_only": 7,
-   "p": 0.1796875
+   "p": 0.1796875,
+   "holm_reject": false
   },
   "Qwen2.5-0.5B-Instruct GSM8K chat template vs none": {
    "model": "Qwen2.5-0.5B-Instruct",
@@ -3651,9 +3654,10 @@
    "se_diff": 0.050950956811427986,
    "a_only": 12,
    "b_only": 14,
-   "p": 0.8450189828872681
+   "p": 0.8450189828872681,
+   "holm_reject": false
   },
-  "SmolLM2-360M-Instruct GSM8K chat template with chain of thought vs none": {
+  "SmolLM2-360M-Instruct GSM8K chat template with 4-shot chain of thought vs none": {
    "model": "SmolLM2-360M-Instruct",
    "task": "gsm8k",
    "n": 100,
@@ -3663,9 +3667,10 @@
    "se_diff": 0.024166091947189147,
    "a_only": 1,
    "b_only": 5,
-   "p": 0.21875
+   "p": 0.21875,
+   "holm_reject": false
   },
-  "Qwen2.5-0.5B-Instruct GSM8K chat template with chain of thought vs none": {
+  "Qwen2.5-0.5B-Instruct GSM8K chat template with 4-shot chain of thought vs none": {
    "model": "Qwen2.5-0.5B-Instruct",
    "task": "gsm8k",
    "n": 100,
@@ -3675,7 +3680,8 @@
    "se_diff": 0.051720402163943004,
    "a_only": 11,
    "b_only": 16,
-   "p": 0.44206833839416504
+   "p": 0.44206833839416504,
+   "holm_reject": false
   },
   "Qwen2.5-0.5B GSM8K 4-shot vs 5-shot": {
    "model": "Qwen2.5-0.5B",
@@ -3687,7 +3693,8 @@
    "se_diff": 0.025159491250818247,
    "a_only": 30,
    "b_only": 27,
-   "p": 0.7913664277791806
+   "p": 0.7913664277791806,
+   "holm_reject": false
   },
   "Qwen2.5-0.5B GSM8K 4-shot chain of thought vs 5-shot": {
    "model": "Qwen2.5-0.5B",
@@ -3699,7 +3706,8 @@
    "se_diff": 0.02824430457173164,
    "a_only": 27,
    "b_only": 46,
-   "p": 0.034415913668175036
+   "p": 0.034415913668175036,
+   "holm_reject": false
   },
   "Qwen3-0.6B-Base GSM8K 4-shot vs 5-shot": {
    "model": "Qwen3-0.6B-Base",
@@ -3711,7 +3719,8 @@
    "se_diff": 0.02376661212398292,
    "a_only": 29,
    "b_only": 22,
-   "p": 0.4010619910279374
+   "p": 0.4010619910279374,
+   "holm_reject": false
   },
   "Qwen3-0.6B-Base GSM8K 4-shot chain of thought vs 5-shot": {
    "model": "Qwen3-0.6B-Base",
@@ -3723,7 +3732,8 @@
    "se_diff": 0.028299980369054834,
    "a_only": 25,
    "b_only": 49,
-   "p": 0.007084252673880489
+   "p": 0.007084252673880489,
+   "holm_reject": false
   }
  },
  "gsm8k_filters": {

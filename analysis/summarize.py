@@ -496,7 +496,7 @@ def cards():
              "SmolLM2-360M-Instruct GSM8K chat template vs none": ("SmolLM2-360M-Instruct", "gsm8k", ("cards", "gsm8k"), ("models", None)),
              "Qwen2.5-0.5B-Instruct GSM8K chat template vs none": ("Qwen2.5-0.5B-Instruct", "gsm8k", ("cards", "gsm8k"), ("models", None))}
     for m in ("SmolLM2-360M-Instruct", "Qwen2.5-0.5B-Instruct"):
-        tests[f"{m} GSM8K chat template with chain of thought vs none"] = (m, "gsm8k", ("cards", "gsm8k_cot"), ("models", None))
+        tests[f"{m} GSM8K chat template with 4-shot chain of thought vs none"] = (m, "gsm8k", ("cards", "gsm8k_cot"), ("models", None))
     for m in ("Qwen2.5-0.5B", "Qwen3-0.6B-Base"):
         tests[f"{m} GSM8K 4-shot vs 5-shot"] = (m, "gsm8k", ("cards", "gsm8k"), ("full", 300))
         tests[f"{m} GSM8K 4-shot chain of thought vs 5-shot"] = (m, "gsm8k", ("cards", "gsm8k_cot"), ("full", 300))
@@ -509,6 +509,11 @@ def cards():
         assert len(y1) == len(y0), name
         out[name] = {"model": m, "task": t, "n": int(len(y1)), "publisher_setting": float(y1.mean()),
                      "ours": float(y0.mean()), **mcnemar(y0, y1)}
+    # Holm's correction over the tests of this table
+    order, stop = sorted(out, key=lambda k: out[k]["p"]), False
+    for i, k in enumerate(order):
+        stop = stop or out[k]["p"] > 0.05 / (len(order) - i)
+        out[k]["holm_reject"] = not stop
     return out
 
 
