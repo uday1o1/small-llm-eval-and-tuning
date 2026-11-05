@@ -97,7 +97,12 @@ def laptop_reproduction():
 def cloze_pairs():
     """McNemar on cloze-MMLU acc_norm for every pair of base models (same questions, same order)."""
     y = {m: items("cloze", m).sort_values(["sub", "doc_id"]).acc_norm.to_numpy(float) for m in BASE_MODELS}
-    return [{"a": a, "b": b, **mcnemar(y[a], y[b])} for i, a in enumerate(BASE_MODELS) for b in BASE_MODELS[i + 1:]]
+    out = [{"a": a, "b": b, **mcnemar(y[a], y[b])} for i, a in enumerate(BASE_MODELS) for b in BASE_MODELS[i + 1:]]
+    stop = False                                   # Holm's correction over the 15 pairs
+    for i, r in enumerate(sorted(out, key=lambda r: r["p"])):
+        stop = stop or r["p"] > 0.05 / (len(out) - i)
+        r["holm_reject"] = not stop
+    return out
 
 
 def cloze():

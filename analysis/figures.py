@@ -49,7 +49,7 @@ def evaluation():
     b.set_xticks(range(len(tasks)), [f"{TASKS[t][1]}\n({'acc_norm' if TASKS[t][0] == 'acc_norm' else 'acc' if t != 'gsm8k' else 'exact match'})" for t in tasks])
     b.set_ylabel("accuracy (± SE)")
     b.set_ylim(0, 0.8)
-    b.set_title("(b) Benchmarks: first 300 questions (bars), full set (marks)", loc="left")
+    b.set_title("(b) Bars: first 300 (MMLU per subject, GSM8K 100); marks: all", loc="left")
     b.legend(ncol=4, loc="upper center", bbox_to_anchor=(0.5, -0.2), frameon=False)
     fig.tight_layout()
     fig.savefig(OUT / "evaluation.png", dpi=200)
