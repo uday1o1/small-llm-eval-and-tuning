@@ -33,7 +33,7 @@
    "kv_bytes_per_token_bf16": 12288,
    "attention_flops_per_token_per_context_token": 49152,
    "recurrent_state_elems_per_layer": 262144,
-   "conv_state_elems_per_layer": 18432,
+   "conv_state_elems_per_layer": 24576,
    "n_linear_layers": 18
   },
   "measured": [

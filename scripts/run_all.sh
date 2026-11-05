@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # Every run behind the results (one GPU). Finished runs are skipped, so the script can be re-run to
 # resume. SLOTS = how many training or evaluation jobs share the GPU at a time; BSLOTS = the same for
-# lm_eval jobs (fp32 logits over a 150k to 250k-token vocabulary take up to 8 GB each), and any
-# that still run out of memory are retried one at a time.
+# lm_eval jobs (fp32 logits over a 150k to 250k-token vocabulary are large), and any that fail,
+# for example out of memory, are retried one at a time.
 #   bash scripts/run_all.sh                 # all stages
 #   bash scripts/run_all.sh sft dpo         # selected stages
 set -euo pipefail
@@ -36,7 +36,7 @@ crosscheck() {   # nanolm's scorer and lm_eval on the first 300 ARC-Easy questio
 
 benchmarks() {   # lm_eval through nanolm.benchmarks: nanolm's laptop config (output directory changed only), then ours
   for n in "$BSLOTS" 1; do python -m nanolm.benchmarks run -c configs/benchmarks/laptop.yaml --slots $n; done
-  for c in models full cloze cloze_qwen3.5; do for n in "$BSLOTS" 1; do python scripts/bench.py run -c configs/benchmarks/$c.yaml --slots $n; done; done
+  for c in models full cloze cloze_qwen3.5 cards; do for n in "$BSLOTS" 1; do python scripts/bench.py run -c configs/benchmarks/$c.yaml --slots $n; done; done
 }
 
 sft() {   # training-set size 500 / 2000 / 8000, 250 steps x 16 examples each
@@ -60,6 +60,7 @@ posthoc() {   # FineWeb bpb, held-out generations and (DPO) all held-out pairs, 
     mkdir -p $d; echo "$d/posthoc.json python scripts/posthoc.py $k $d > $d/posthoc.log 2>&1"
   done; done | run_jobs
   [ -e runs/dpo/pair_lengths.json ] || python scripts/pair_lengths.py runs/dpo/pair_lengths.json > /dev/null
+  [ -e runs/token_budget.json ] || python scripts/token_budget.py runs/token_budget.json > /dev/null
 }
 
 architecture() {   # parameters per component and inference-state memory: Qwen3.5-2B against Qwen3-1.7B
@@ -67,13 +68,13 @@ architecture() {   # parameters per component and inference-state memory: Qwen3.
 }
 
 analyze() {   # per-question tables, nanolm.analyze per study (paired p against the middle setting), the environment
-  python scripts/extract_items.py runs/benchmarks/models runs/benchmarks/full runs/benchmarks/cloze runs/benchmarks/sft runs/benchmarks/dpo
+  python scripts/extract_items.py runs/benchmarks/models runs/benchmarks/full runs/benchmarks/cloze runs/benchmarks/cards runs/benchmarks/sft runs/benchmarks/dpo
   # nanolm.analyze writes summary.csv/md and then stops at its curve plot (fine-tuning eval logs have no
   # train_tokens column), so its exit status is ignored and the summary files are checked instead
   python -m nanolm.analyze runs/sft --metric after_val_response_nll --baseline sft_n2000 > runs/sft/analyze_stdout.txt 2>&1 || true
   python -m nanolm.analyze runs/dpo --metric after_val_reward_acc --baseline dpo_beta0.1 > runs/dpo/analyze_stdout.txt 2>&1 || true
   ls runs/sft/summary.csv runs/sft/summary.md runs/dpo/summary.csv runs/dpo/summary.md > /dev/null
-  for c in laptop models full cloze sft dpo; do r=runs/benchmarks/$c
+  for c in laptop models full cloze cards sft dpo; do r=runs/benchmarks/$c
     [ -d $r ] && python scripts/bench.py summary $r > $r/summary_stdout.txt; done
   { echo "# Environment of every run (recorded on the machine that ran them)"
     nvidia-smi --query-gpu=name,driver_version,memory.total --format=csv; echo

@@ -10,7 +10,7 @@ import re
 import numpy as np
 import pandas as pd
 
-from scipy.stats import ttest_rel
+from scipy.stats import ttest_1samp, ttest_rel
 
 from common import (DPO_BETAS, SEEDS, SFT_SIZES, BASE_MODELS, CROSSCHECK_DIR, GSM8K_FILTER, HF_ID, ROOT, RUNS, TASKS, items, mcnemar, save,
                     task_scores, vs_chance)
@@ -189,6 +189,20 @@ def paired(a, b):
             "all_same_sign": bool((d > 0).all() or (d < 0).all())}
 
 
+def all_pairs(recs, keys, get):
+    """Every pair of settings: paired change over seeds, and the noise floor of the two settings compared
+    (the median, i.e. the mean, of their two within-setting stds)."""
+    out = {}
+    for i, a in enumerate(keys):
+        for b in keys[i + 1:]:
+            va, vb = [get(x) for x in recs[a]], [get(x) for x in recs[b]]
+            d = paired(va, vb)
+            d["floor"] = float(np.median([np.std(va, ddof=1), np.std(vb, ddof=1)]))
+            d["resolved"] = bool(abs(d["mean_diff"]) >= 2 * d["floor"])
+            out[f"{b}-{a}"] = d
+    return out
+
+
 def run_records(kind, key):
     out = []
     for sd in SEEDS:
@@ -226,19 +240,32 @@ def vs_base_gens(recs, base_gens, short=20):
     return {"longer": describe(longer), "n_short": len(idx), "short_kept": kept, "short_doubled": doubled}
 
 
-def bench_deltas(cfg, base_cfg, base_model, names):
-    """Per seed: tuned minus base on every task (same questions), with McNemar per seed."""
+def bench_deltas(cfg, base_cfg, base_model, names, n_boot=2000):
+    """Tuned minus base on every task (same questions): per seed with McNemar, and the seed-mean change with a
+    95% interval from resampling the questions (paired bootstrap: per question, the tuned-minus-base
+    correctness averaged over the seeds, resampled with replacement)."""
     base = task_scores(items(base_cfg, base_model))
+    rng = np.random.default_rng(0)
     out = {}
     for name in names:
         per = {t: [] for t in TASKS}
+        dq = {t: [] for t in TASKS}
         for sd in SEEDS:
             tuned = task_scores(items(cfg, f"{name}_s{sd}"))
+            agg = aggregate(cfg, f"{name}_s{sd}")
+            assert all(abs(tuned[t][0].mean() - agg[t]) < 1e-9 for t in TASKS), (name, sd)   # per-question records = lm_eval aggregate
             for t in TASKS:
                 per[t].append(mcnemar(base[t][0], tuned[t][0]))
-        out[name] = {t: {"diff": describe([r["diff"] for r in v]), "mcnemar_p": [r["p"] for r in v],
-                         "se_diff": [r["se_diff"] for r in v],
-                         "base_acc": float(base[t][0].mean())} for t, v in per.items()}
+                dq[t].append(tuned[t][0] - base[t][0])
+        out[name] = {}
+        for t, v in per.items():
+            q = np.mean(dq[t], axis=0)                                   # per question, mean over seeds
+            boot = np.array([q[rng.integers(0, len(q), len(q))].mean() for _ in range(n_boot)])
+            lo, hi = np.percentile(boot, [2.5, 97.5])
+            out[name][t] = {"diff": describe([r["diff"] for r in v]), "mcnemar_p": [r["p"] for r in v],
+                            "se_diff": [r["se_diff"] for r in v], "n_questions": int(len(q)),
+                            "boot_ci95": [float(lo), float(hi)], "boot_se": float(boot.std(ddof=1)),
+                            "base_acc": float(base[t][0].mean())}
     return out
 
 
@@ -247,7 +274,7 @@ def sft():
     recs = {k: run_records("sft", k) for k in keys}
     for k in keys:
         r = recs[k]
-        befores = [x["metrics"]["before_val_response_nll"] for x in r]    # the same model; differs only by TF32 rounding
+        befores = [x["metrics"]["before_val_response_nll"] for x in r]    # the same model; differs only by floating-point nondeterminism
         curve = {}
         for x in r:
             for e in x["curve"]:
@@ -268,9 +295,14 @@ def sft():
     out["vs_n2000"] = {k: paired([x["metrics"]["after_val_response_nll"] for x in recs[ref]],
                                  [x["metrics"]["after_val_response_nll"] for x in recs[k]]) for k in keys if k != ref}
     out["noise_floor"] = float(np.median([out[k]["after_nll"]["std"] for k in keys]))
+    out["pairs"] = all_pairs(recs, keys, lambda x: x["metrics"]["after_val_response_nll"])
     base = json.loads(open(RUNS / "sft" / "base" / "posthoc.json").read())
     bg = [json.loads(l) for l in open(RUNS / "sft" / "base" / "generations.jsonl")]
     out["base"] = {"fineweb_bpb": base["fineweb_val_bpb"], "gen": gen_stats(bg)}
+    # nanolm's own before/after samples (5 fixed prompts): runs whose answer places Paris in Normandy
+    out["paris_in_normandy_runs"] = sum("Normandy" in (RUNS / "sft" / f"{k}_s{sd}" / "samples_after.txt").read_text()
+                                        for k in keys for sd in SEEDS)
+    out["paris_in_normandy_before"] = "Normandy" in (RUNS / "sft" / "n2000_s1337" / "samples_before.txt").read_text()
     for k in keys:
         out[k]["longer_than_base"] = vs_base_gens(recs[k], bg)
     out["benchmarks"] = bench_deltas("sft", "models", "SmolLM2-360M", keys)
@@ -317,11 +349,23 @@ def dpo():
     out["vs_beta0.1_heldout"] = {k: {m: paired([x["posthoc"][m] for x in recs[ref]], [x["posthoc"][m] for x in recs[k]])
                                         for m in ("reward_acc", "logratio_margin", "policy_prefers_chosen")} for k in keys if k != ref}
     out["noise_floor_reward_acc"] = float(np.median([out[k]["after_acc"]["std"] for k in keys]))
+    out["pairs"] = {m: all_pairs(recs, keys, g) for m, g in (
+        ("reward_acc_100", lambda x: x["metrics"]["after_val_reward_acc"]),
+        ("reward_margin_100", lambda x: x["metrics"]["after_val_reward_margin"]),
+        ("policy_prefers_chosen_100", lambda x: x["metrics"]["after_val_policy_prefers_chosen"]),
+        ("reward_acc_heldout", lambda x: x["posthoc"]["reward_acc"]),
+        ("logratio_margin_heldout", lambda x: x["posthoc"]["logratio_margin"]),
+        ("policy_prefers_chosen_heldout", lambda x: x["posthoc"]["policy_prefers_chosen"]),
+        ("answer_tokens", lambda x: gen_stats(x["gens"])["tokens"]))}
     out["noise_floor_reward_acc_heldout"] = float(np.median([out[k]["heldout"]["reward_acc"]["std"] for k in keys]))
     base = json.loads(open(RUNS / "dpo" / "base" / "posthoc.json").read())
     bg = [json.loads(l) for l in open(RUNS / "dpo" / "base" / "generations.jsonl")]
     out["base"] = {"fineweb_bpb": base["fineweb_val_bpb"], "policy_prefers_chosen_heldout": base["policy_prefers_chosen"],
                    "gen": gen_stats(bg)}
+    # the policy's own preference after tuning against the untuned model's (a fixed value): one-sample t-test
+    out["prefers_vs_untuned"] = {k: {"mean_diff": float(np.mean([x["posthoc"]["policy_prefers_chosen"] for x in recs[k]]) - base["policy_prefers_chosen"]),
+                                     "p": float(ttest_1samp([x["posthoc"]["policy_prefers_chosen"] for x in recs[k]], base["policy_prefers_chosen"]).pvalue)}
+                                 for k in keys}
     for k in keys:
         out[k]["longer_than_base"] = vs_base_gens(recs[k], bg)
     out["pair_lengths"] = json.loads(open(RUNS / "dpo" / "pair_lengths.json").read())
@@ -361,6 +405,7 @@ def mmlu_letters():
             share = d.pred.value_counts(normalize=True)
             top = int(share.idxmax())
             out[m] = {"scope": cfg, "n": int(len(d)), "acc": float(d.acc.mean()), "top_letter": "ABCD"[top],
+                      "n_correct": int(d.acc.sum()), "n_gold_top_letter": int((d.gold == top).sum()),
                       "top_letter_share": float(share.max()),
                       "pred_share": {"ABCD"[int(k)]: float(v) for k, v in share.sort_index().items()},
                       "gold_share": {"ABCD"[int(k)]: float(v) for k, v in d.gold.value_counts(normalize=True).sort_index().items()}}
@@ -382,10 +427,10 @@ def hellaswag_sources():
 
 # ------------------------------------------------------------------- publisher-reported scores
 # Copied from the model cards and technical reports (percent), with the settings the source states.
-# SmolLM2: HF model cards (lighteval, 0-shot except GSM8K 5-shot; ARC = average of Easy and Challenge;
-# MMLU in the cloze form). Qwen2.5-0.5B: Qwen2.5 technical report (arXiv:2412.15115v2) Table 5.
-# Qwen3-0.6B-Base: Qwen3 technical report (arXiv:2505.09388v1) Table 8. GPT-2 and Qwen3.5-0.8B-Base
-# publish none of these benchmarks.
+# SmolLM2: HF model cards (lighteval, 0-shot except GSM8K 5-shot; the cards' "ARC (Average)", compared with
+# the mean of our ARC-Easy and ARC-Challenge; "MMLU (cloze)"). Qwen2.5-0.5B: Qwen2.5 technical report
+# (arXiv:2412.15115v2) Table 5; Qwen2.5-0.5B-Instruct: the same report's Table 10. Qwen3-0.6B-Base: Qwen3
+# technical report (arXiv:2505.09388v1) Table 8. GPT-2 and Qwen3.5-0.8B-Base publish none of these.
 MODEL_CARDS = {
     "SmolLM2-135M": {"arc_avg": (43.9, "0-shot"), "hellaswag": (42.1, "0-shot"), "mmlu_cloze": (31.5, "0-shot, cloze"), "gsm8k": (1.4, "5-shot")},
     "SmolLM2-360M": {"arc_avg": (53.0, "0-shot"), "hellaswag": (54.5, "0-shot"), "mmlu_cloze": (35.8, "0-shot, cloze"), "gsm8k": (3.2, "5-shot")},
@@ -403,7 +448,6 @@ def model_cards(full, subset, cl):
     out = {}
     for m, pub in MODEL_CARDS.items():
         src = full.get(m) or subset[m]
-        scope = "full" if m in full else "first300"
         out[m] = {}
         for k, (v, setting) in pub.items():
             if k == "arc_avg":
@@ -412,9 +456,46 @@ def model_cards(full, subset, cl):
                 ours = cl[m]["acc_norm"] if m in cl else None
             else:
                 ours = src[k]["acc"]
+            scope = "full" if m in full else "first100" if k == "gsm8k" else "first300"
             out[m][k] = {"published": v / 100, "setting": setting,
                          "ours": ours, "ours_scope": "full (cloze)" if k == "mmlu_cloze" else scope,
                          "gap": None if ours is None else ours - v / 100}
+    return out
+
+
+# ------------------------------------------------- publisher settings, run on the same questions
+def cards():
+    """Each publisher setting that differs from ours (configs/benchmarks/cards.yaml), against our setting on
+    the same questions (McNemar). Each model's groups in cards.yaml run different tasks, so one per-question
+    table per model holds them all."""
+    tests = {"Qwen2.5-0.5B ARC-Challenge 25-shot vs 0-shot": ("Qwen2.5-0.5B", "arc_challenge", ("cards", "arc_challenge_25shot"), ("full", None)),
+             "Qwen2.5-0.5B GSM8K 4-shot vs 5-shot": ("Qwen2.5-0.5B", "gsm8k", ("cards", "gsm8k_4shot"), ("models", None)),
+             "Qwen3-0.6B-Base MMLU 5-shot vs 0-shot": ("Qwen3-0.6B-Base", "mmlu", ("cards", "mmlu_5shot"), ("full", None)),
+             "SmolLM2-360M-Instruct GSM8K chat template vs none": ("SmolLM2-360M-Instruct", "gsm8k", ("cards", "gsm8k_chat"), ("models", None)),
+             "Qwen2.5-0.5B-Instruct GSM8K chat template vs none": ("Qwen2.5-0.5B-Instruct", "gsm8k", ("cards", "gsm8k_chat"), ("models", None))}
+    out = {}
+    for name, (m, t, (c1, g1), (c0, _)) in tests.items():
+        y1, y0 = task_scores(items(c1, m))[t][0], task_scores(items(c0, m))[t][0]
+        assert len(y1) == len(y0)
+        out[name] = {"model": m, "task": t, "n": int(len(y1)), "publisher_setting": float(y1.mean()),
+                     "ours": float(y0.mean()), **mcnemar(y0, y1)}
+    return out
+
+
+# ------------------------------------------------------------------------------- token budget
+def token_budget():
+    """Training tokens per run (scripts/token_budget.py) and 6ND with N = all parameters."""
+    tb = json.loads(open(RUNS / "token_budget.json").read())
+    out = {}
+    for kind, keys in (("sft", [f"n{n}" for n in SFT_SIZES]), ("dpo", [f"beta{b}" for b in DPO_BETAS])):
+        for k in keys:
+            r = [tb[f"{kind}/{k}_s{sd}"] for sd in SEEDS]
+            n_params = json.loads(open(RUNS / kind / f"{k}_s{SEEDS[0]}" / "metrics.json").read())["params"]
+            out[f"{kind}/{k}"] = {"tokens": describe([x["tokens"] for x in r]),
+                                  "answer_tokens": describe([x["answer_tokens"] for x in r]),
+                                  "distinct_examples": describe([x["distinct_examples"] for x in r]),
+                                  "examples_drawn": r[0]["examples_drawn"], "params": n_params,
+                                  "flops_6ND": 6 * n_params * float(np.mean([x["tokens"] for x in r]))}
     return out
 
 
@@ -508,7 +589,7 @@ def main():
                "benchmarks": bench_table("models", models), "benchmarks_full": bench_table("full", BASE_MODELS),
                "pairwise_subset": pairwise("models", BASE_MODELS), "pairwise_full": pairwise("full", BASE_MODELS),
                "laptop_reproduction": laptop_reproduction(), "mmlu_cloze": cloze(), "mmlu_cloze_pairs": cloze_pairs(),
-               "subset_vs_full": subset_vs_full(), "hellaswag_sources": hellaswag_sources(), "mmlu_letters": mmlu_letters(), "architecture": architecture(), "provenance": provenance(), "compute": compute(),
+               "subset_vs_full": subset_vs_full(), "hellaswag_sources": hellaswag_sources(), "mmlu_letters": mmlu_letters(), "architecture": architecture(), "provenance": provenance(), "compute": compute(), "cards": cards(), "token_budget": token_budget(),
                "sft": sft(), "dpo": dpo()}
     summary["model_cards"] = model_cards(summary["benchmarks_full"], summary["benchmarks"], summary["mmlu_cloze"])
     save(summary, ROOT / "results" / "summary.json")

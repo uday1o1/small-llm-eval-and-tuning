@@ -5,8 +5,9 @@ nanolm.benchmarks.mc_accuracy scores them, with both normalizations recorded (GP
 
 For every question and choice the CSV holds the summed log-probability of the choice tokens, the
 number of characters of the choice (without the separating space, as mc_accuracy and lm_eval
-count them) and the number of tokens the choice adds after the context. Before writing, the
-script checks that its accuracies on the first 300 questions equal nanolm's own mc_accuracy.
+count them) and the number of tokens the choice adds after the context. Before writing the JSON
+summary (the CSV is written first), the script checks that its accuracies on the first 300
+questions equal nanolm's own mc_accuracy.
 """
 import csv
 import json

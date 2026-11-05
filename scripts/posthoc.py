@@ -7,7 +7,8 @@ For every run directory it writes posthoc.json and generations.jsonl:
   * FineWeb bits per byte of the tuned model (nanolm.finetune.eval_bpb, as for the base models);
   * greedy answers to held-out prompts (the first 50 held-out examples of the run's own split, never
     trained on), with the answer length and whether the answer ended with the end-of-turn token;
-  * DPO only (for the untuned model, only the policy's own preference): implicit-reward accuracy
+  * DPO only (the untuned model is its own reference, so its rewards are zero and only the policy's
+    own preference is informative): implicit-reward accuracy
     and margin on every held-out pair that nanolm's filter keeps from the test split (asking for 500
     returns all 240: the run's 100 validation pairs first, then the other 140), and how far the
     policy moved the per-token log-probability of the chosen and of the rejected answers away from

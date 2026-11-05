@@ -1,0 +1,25 @@
+2026-11-05:13:17:18 WARNING  [config.evaluate_config:281] --limit SHOULD ONLY BE USED FOR TESTING. REAL METRICS SHOULD NOT BE COMPUTED USING LIMIT.
+2026-11-05:13:17:21 INFO     [_cli.run:376] Selected Tasks: ['gsm8k']
+2026-11-05:13:17:21 INFO     [evaluator:211] Setting random seed to 1234 | Setting numpy seed to 1234 | Setting torch manual seed to 1234 | Setting fewshot manual seed to 1234
+2026-11-05:13:17:21 INFO     [evaluator:236] Initializing hf model, with arguments: {'pretrained': 'Qwen/Qwen2.5-0.5B-Instruct', 'dtype': 'float32'}
+2026-11-05:13:17:22 INFO     [models.huggingface:161] Using device 'cuda'
+2026-11-05:13:17:24 INFO     [models.huggingface:423] Model parallel was set to False, max memory was not set, and device map was set to {'': 'cuda'}
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  21%|██        | 60/290 [00:00<00:00, 597.91it/s]Loading weights:  52%|█████▏    | 151/290 [00:00<00:00, 775.45it/s]Loading weights:  86%|████████▌ | 250/290 [00:00<00:00, 867.34it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 844.71it/s]
+2026-11-05:13:17:30 INFO     [tasks:700] Selected tasks:
+2026-11-05:13:17:30 INFO     [tasks:691] Task: gsm8k (gsm8k/gsm8k.yaml)
+2026-11-05:13:17:30 INFO     [evaluator:314] gsm8k: Using gen_kwargs: {'until': ['Question:', '</s>', '<|im_end|>'], 'do_sample': False, 'temperature': 0.0}
+2026-11-05:13:17:30 WARNING  [evaluator:333] Overwriting default num_fewshot of gsm8k from 5 to 5
+2026-11-05:13:17:30 WARNING  [evaluator:490] Chat template formatting change affects loglikelihood and multiple-choice tasks. See docs/chat-template-readme.md for details.
+2026-11-05:13:17:30 INFO     [api.task:311] Building contexts for gsm8k on rank 0...
+  0%|          | 0/100 [00:00<?, ?it/s] 42%|████▏     | 42/100 [00:00<00:00, 414.29it/s] 87%|████████▋ | 87/100 [00:00<00:00, 434.63it/s]100%|██████████| 100/100 [00:00<00:00, 433.72it/s]
+2026-11-05:13:17:30 INFO     [evaluator:584] Running generate_until requests
+Running generate_until requests:   0%|          | 0/100 [00:00<?, ?it/s]Running generate_until requests:   1%|          | 1/100 [00:09<15:50,  9.60s/it]Running generate_until requests:   5%|▌         | 5/100 [00:18<05:18,  3.35s/it]Running generate_until requests:   9%|▉         | 9/100 [00:23<03:22,  2.22s/it]Running generate_until requests:  13%|█▎        | 13/100 [00:32<03:13,  2.23s/it]Running generate_until requests:  17%|█▋        | 17/100 [00:41<03:03,  2.21s/it]Running generate_until requests:  21%|██        | 21/100 [00:50<02:52,  2.19s/it]Running generate_until requests:  25%|██▌       | 25/100 [00:57<02:37,  2.09s/it]Running generate_until requests:  29%|██▉       | 29/100 [01:05<02:24,  2.04s/it]Running generate_until requests:  33%|███▎      | 33/100 [01:14<02:19,  2.08s/it]Running generate_until requests:  37%|███▋      | 37/100 [01:19<01:54,  1.82s/it]Running generate_until requests:  41%|████      | 41/100 [01:27<01:50,  1.87s/it]Running generate_until requests:  45%|████▌     | 45/100 [01:35<01:47,  1.95s/it]Running generate_until requests:  49%|████▉     | 49/100 [01:44<01:42,  2.01s/it]Running generate_until requests:  53%|█████▎    | 53/100 [01:52<01:35,  2.04s/it]Running generate_until requests:  57%|█████▋    | 57/100 [01:59<01:24,  1.97s/it]Running generate_until requests:  61%|██████    | 61/100 [02:08<01:18,  2.01s/it]Running generate_until requests:  65%|██████▌   | 65/100 [02:16<01:10,  2.02s/it]Running generate_until requests:  69%|██████▉   | 69/100 [02:24<01:02,  2.03s/it]Running generate_until requests:  73%|███████▎  | 73/100 [02:32<00:54,  2.03s/it]Running generate_until requests:  77%|███████▋  | 77/100 [02:38<00:42,  1.85s/it]Running generate_until requests:  81%|████████  | 81/100 [02:46<00:36,  1.90s/it]Running generate_until requests:  85%|████████▌ | 85/100 [02:53<00:28,  1.87s/it]Running generate_until requests:  89%|████████▉ | 89/100 [03:00<00:20,  1.85s/it]Running generate_until requests:  93%|█████████▎| 93/100 [03:07<00:12,  1.81s/it]Running generate_until requests:  97%|█████████▋| 97/100 [03:15<00:05,  1.85s/it]Running generate_until requests: 100%|██████████| 100/100 [03:15<00:00,  1.95s/it]
+fatal: not a git repository (or any of the parent directories): .git
+2026-11-05:13:20:49 INFO     [loggers.evaluation_tracker:247] Saving results aggregated
+2026-11-05:13:20:49 INFO     [loggers.evaluation_tracker:119] Saving per-task samples to runs/benchmarks/cards/Qwen2.5-0.5B-Instruct/gsm8k_chat/Qwen__Qwen2.5-0.5B-Instruct/*.jsonl
+hf ({'pretrained': 'Qwen/Qwen2.5-0.5B-Instruct', 'dtype': 'float32'}), gen_kwargs: ({}), limit: 100.0, num_fewshot: 5, batch_size: 4
+|Tasks|Version|     Filter     |n-shot|  Metric   |   |Value|   |Stderr|
+|-----|------:|----------------|-----:|-----------|---|----:|---|-----:|
+|gsm8k|      3|flexible-extract|     5|exact_match|↑  | 0.36|±  |0.0482|
+|     |       |strict-match    |     5|exact_match|↑  | 0.10|±  |0.0302|
+

@@ -1,0 +1,212 @@
+{
+ "sft/n500_s1337": {
+  "examples_drawn": 4000,
+  "distinct_examples": 500,
+  "n_train": 500,
+  "tokens": 577648,
+  "answer_tokens": 461816
+ },
+ "sft/n500_s42": {
+  "examples_drawn": 4000,
+  "distinct_examples": 500,
+  "n_train": 500,
+  "tokens": 577648,
+  "answer_tokens": 461816
+ },
+ "sft/n500_s1": {
+  "examples_drawn": 4000,
+  "distinct_examples": 500,
+  "n_train": 500,
+  "tokens": 577648,
+  "answer_tokens": 461816
+ },
+ "sft/n500_s2": {
+  "examples_drawn": 4000,
+  "distinct_examples": 500,
+  "n_train": 500,
+  "tokens": 577648,
+  "answer_tokens": 461816
+ },
+ "sft/n500_s3": {
+  "examples_drawn": 4000,
+  "distinct_examples": 500,
+  "n_train": 500,
+  "tokens": 577648,
+  "answer_tokens": 461816
+ },
+ "sft/n2000_s1337": {
+  "examples_drawn": 4000,
+  "distinct_examples": 2000,
+  "n_train": 2000,
+  "tokens": 602342,
+  "answer_tokens": 487462
+ },
+ "sft/n2000_s42": {
+  "examples_drawn": 4000,
+  "distinct_examples": 2000,
+  "n_train": 2000,
+  "tokens": 602342,
+  "answer_tokens": 487462
+ },
+ "sft/n2000_s1": {
+  "examples_drawn": 4000,
+  "distinct_examples": 2000,
+  "n_train": 2000,
+  "tokens": 602342,
+  "answer_tokens": 487462
+ },
+ "sft/n2000_s2": {
+  "examples_drawn": 4000,
+  "distinct_examples": 2000,
+  "n_train": 2000,
+  "tokens": 602342,
+  "answer_tokens": 487462
+ },
+ "sft/n2000_s3": {
+  "examples_drawn": 4000,
+  "distinct_examples": 2000,
+  "n_train": 2000,
+  "tokens": 602342,
+  "answer_tokens": 487462
+ },
+ "sft/n8000_s1337": {
+  "examples_drawn": 4000,
+  "distinct_examples": 4000,
+  "n_train": 8000,
+  "tokens": 594447,
+  "answer_tokens": 476937
+ },
+ "sft/n8000_s42": {
+  "examples_drawn": 4000,
+  "distinct_examples": 4000,
+  "n_train": 8000,
+  "tokens": 597927,
+  "answer_tokens": 479929
+ },
+ "sft/n8000_s1": {
+  "examples_drawn": 4000,
+  "distinct_examples": 4000,
+  "n_train": 8000,
+  "tokens": 594611,
+  "answer_tokens": 477626
+ },
+ "sft/n8000_s2": {
+  "examples_drawn": 4000,
+  "distinct_examples": 4000,
+  "n_train": 8000,
+  "tokens": 596569,
+  "answer_tokens": 479956
+ },
+ "sft/n8000_s3": {
+  "examples_drawn": 4000,
+  "distinct_examples": 4000,
+  "n_train": 8000,
+  "tokens": 601873,
+  "answer_tokens": 484563
+ },
+ "dpo/beta0.05_s1337": {
+  "examples_drawn": 800,
+  "distinct_examples": 800,
+  "n_train": 800,
+  "tokens": 405205,
+  "answer_tokens": 198403
+ },
+ "dpo/beta0.05_s42": {
+  "examples_drawn": 800,
+  "distinct_examples": 800,
+  "n_train": 800,
+  "tokens": 405205,
+  "answer_tokens": 198403
+ },
+ "dpo/beta0.05_s1": {
+  "examples_drawn": 800,
+  "distinct_examples": 800,
+  "n_train": 800,
+  "tokens": 405205,
+  "answer_tokens": 198403
+ },
+ "dpo/beta0.05_s2": {
+  "examples_drawn": 800,
+  "distinct_examples": 800,
+  "n_train": 800,
+  "tokens": 405205,
+  "answer_tokens": 198403
+ },
+ "dpo/beta0.05_s3": {
+  "examples_drawn": 800,
+  "distinct_examples": 800,
+  "n_train": 800,
+  "tokens": 405205,
+  "answer_tokens": 198403
+ },
+ "dpo/beta0.1_s1337": {
+  "examples_drawn": 800,
+  "distinct_examples": 800,
+  "n_train": 800,
+  "tokens": 405205,
+  "answer_tokens": 198403
+ },
+ "dpo/beta0.1_s42": {
+  "examples_drawn": 800,
+  "distinct_examples": 800,
+  "n_train": 800,
+  "tokens": 405205,
+  "answer_tokens": 198403
+ },
+ "dpo/beta0.1_s1": {
+  "examples_drawn": 800,
+  "distinct_examples": 800,
+  "n_train": 800,
+  "tokens": 405205,
+  "answer_tokens": 198403
+ },
+ "dpo/beta0.1_s2": {
+  "examples_drawn": 800,
+  "distinct_examples": 800,
+  "n_train": 800,
+  "tokens": 405205,
+  "answer_tokens": 198403
+ },
+ "dpo/beta0.1_s3": {
+  "examples_drawn": 800,
+  "distinct_examples": 800,
+  "n_train": 800,
+  "tokens": 405205,
+  "answer_tokens": 198403
+ },
+ "dpo/beta0.5_s1337": {
+  "examples_drawn": 800,
+  "distinct_examples": 800,
+  "n_train": 800,
+  "tokens": 405205,
+  "answer_tokens": 198403
+ },
+ "dpo/beta0.5_s42": {
+  "examples_drawn": 800,
+  "distinct_examples": 800,
+  "n_train": 800,
+  "tokens": 405205,
+  "answer_tokens": 198403
+ },
+ "dpo/beta0.5_s1": {
+  "examples_drawn": 800,
+  "distinct_examples": 800,
+  "n_train": 800,
+  "tokens": 405205,
+  "answer_tokens": 198403
+ },
+ "dpo/beta0.5_s2": {
+  "examples_drawn": 800,
+  "distinct_examples": 800,
+  "n_train": 800,
+  "tokens": 405205,
+  "answer_tokens": 198403
+ },
+ "dpo/beta0.5_s3": {
+  "examples_drawn": 800,
+  "distinct_examples": 800,
+  "n_train": 800,
+  "tokens": 405205,
+  "answer_tokens": 198403
+ }
+}

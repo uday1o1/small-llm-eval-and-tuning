@@ -3,7 +3,7 @@ full-attention model of similar size, from their config.json files (GPU for the 
 
     python scripts/architecture.py results/architecture
 
-1. Each model's config.json is fetched at a pinned commit and the language model is built on
+1. Each model's config.json is fetched at a pinned Hub commit (MODELS) and the language model is built on
    PyTorch's `meta` device (no weights), and its parameters are counted by component.
 2. The same counts are taken from the tensor shapes in the published safetensors headers, as a
    check that the meta-device model matches the released weights.
@@ -19,10 +19,11 @@ from pathlib import Path
 
 import torch
 from accelerate import init_empty_weights
-from huggingface_hub import HfApi, get_safetensors_metadata, hf_hub_download
+from huggingface_hub import get_safetensors_metadata, hf_hub_download
 from transformers import AutoConfig, AutoModelForCausalLM
 
-MODELS = ["Qwen/Qwen3.5-2B", "Qwen/Qwen3-1.7B"]
+MODELS = {"Qwen/Qwen3.5-2B": "15852e8c16360a2fea060d615a32b45270f8a8fc",     # Hub commits
+          "Qwen/Qwen3-1.7B": "70d244cc86ccca08cf5af4e1e306ecf908b1ad5e"}
 MEASURE_T = [1024, 4096, 16384, 32768]
 COMPONENTS = ["embedding", "lm_head", "full_attention", "linear_attention", "mlp", "norm"]
 
@@ -87,8 +88,8 @@ def analytic(tc) -> dict:
         dk, dv = tc.linear_key_head_dim, tc.linear_value_head_dim
         hk, hv = tc.linear_num_key_heads, tc.linear_num_value_heads
         conv_dim = 2 * hk * dk + hv * dv
-        lin = {"recurrent_state_elems_per_layer": hv * dk * dv,
-               "conv_state_elems_per_layer": conv_dim * (tc.linear_conv_kernel_dim - 1),
+        lin = {"recurrent_state_elems_per_layer": hv * dk * dv,                  # kept in fp32 by transformers
+               "conv_state_elems_per_layer": conv_dim * tc.linear_conv_kernel_dim,  # transformers keeps the full kernel width
                "n_linear_layers": n_lin}
     return {"n_layers": len(types), "n_full_attention": n_full, "n_linear_attention": n_lin,
             "hidden": tc.hidden_size, "q_heads": tc.num_attention_heads, "kv_heads": tc.num_key_value_heads,
@@ -116,9 +117,8 @@ def measure(name, sha) -> list[dict]:
 def main(out_dir):
     out = Path(out_dir)
     out.mkdir(parents=True, exist_ok=True)
-    api, res = HfApi(), {}
-    for name in MODELS:
-        sha = api.model_info(name).sha
+    res = {}
+    for name, sha in MODELS.items():
         shutil.copy(hf_hub_download(name, "config.json", revision=sha), out / f"{name.replace('/', '__')}@{sha}.config.json")
         cfg = AutoConfig.from_pretrained(name, revision=sha)
         tc = getattr(cfg, "text_config", cfg)
