@@ -133,7 +133,7 @@ Parameter counts are of the language model (Qwen3.5-2B's vision encoder and mult
 | `figures/` | `evaluation.png`, `sft.png`, `dpo.png`, `architecture.png` |
 | `scripts/` | `setup.sh`, `run_all.sh`, `bench.py` (nanolm.benchmarks with lm_eval's `--log_samples`), `arc_scores.py`, `posthoc.py`, `pair_lengths.py`, `token_budget.py`, `architecture.py`, `extract_items.py`, `env.sh` |
 
-lm_eval's full per-question records (prompts, log-likelihoods, generated answers) are attached to the `v1.0` release: `lm_eval_samples.tar.gz` (324 MB) and `lm_eval_samples_cards.tar.gz` (11 MB, the publisher-setting runs). LoRA adapters are not included; `run_all.sh` retrains them.
+lm_eval's full per-question records (prompts, log-likelihoods, generated answers) are attached to the `v1.0` release: `lm_eval_samples.tar.gz` (324 MB) and `lm_eval_samples_cards.tar.gz` (13 MB, the publisher-setting runs). LoRA adapters are not included; `run_all.sh` retrains them.
 
 ## Reproducing
 
