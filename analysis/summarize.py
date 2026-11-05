@@ -483,7 +483,8 @@ def model_cards(full, subset, cl):
 
 # ------------------------------------------------- publisher settings, run on the same questions
 def cards():
-    """Each publisher setting that differs from ours (configs/benchmarks/cards.yaml), against our setting on
+    """The publishers' settings, and the chat template with and without chain of thought for the instruct models
+    (configs/benchmarks/cards.yaml), against our setting on
     the same questions (McNemar). Each model's groups in cards.yaml run different tasks, so one per-question
     table per model holds them all; GSM8K is scored with lm_eval's flexible-extract filter throughout."""
     def gsm(cfg, m, task, n=None):
@@ -494,6 +495,8 @@ def cards():
              "Qwen3-0.6B-Base MMLU 5-shot vs 0-shot": ("Qwen3-0.6B-Base", "mmlu", ("cards", "mmlu"), ("full", None)),
              "SmolLM2-360M-Instruct GSM8K chat template vs none": ("SmolLM2-360M-Instruct", "gsm8k", ("cards", "gsm8k"), ("models", None)),
              "Qwen2.5-0.5B-Instruct GSM8K chat template vs none": ("Qwen2.5-0.5B-Instruct", "gsm8k", ("cards", "gsm8k"), ("models", None))}
+    for m in ("SmolLM2-360M-Instruct", "Qwen2.5-0.5B-Instruct"):
+        tests[f"{m} GSM8K chat template with chain of thought vs none"] = (m, "gsm8k", ("cards", "gsm8k_cot"), ("models", None))
     for m in ("Qwen2.5-0.5B", "Qwen3-0.6B-Base"):
         tests[f"{m} GSM8K 4-shot vs 5-shot"] = (m, "gsm8k", ("cards", "gsm8k"), ("full", 300))
         tests[f"{m} GSM8K 4-shot chain of thought vs 5-shot"] = (m, "gsm8k", ("cards", "gsm8k_cot"), ("full", 300))
@@ -635,6 +638,12 @@ def main():
                "subset_vs_full": subset_vs_full(), "hellaswag_sources": hellaswag_sources(), "mmlu_letters": mmlu_letters(), "architecture": architecture(), "provenance": provenance(), "compute": compute(), "cards": cards(), "gsm8k_filters": gsm8k_filters(), "token_budget": token_budget(),
                "sft": sft(), "dpo": dpo()}
     summary["model_cards"] = model_cards(summary["benchmarks_full"], summary["benchmarks"], summary["mmlu_cloze"])
+    # benchmark changes after tuning that pass the resolution rule, against a 95% interval's chance rate
+    from scipy.stats import binom
+    flags = [v[t]["passes_rule"] for k in ("sft", "dpo") for v in summary[k]["benchmarks"].values() for t in v]
+    n, n_pass = len(flags), sum(flags)
+    summary["rule_passes"] = {"n_changes": n, "n_pass": n_pass, "expected_by_chance_95": 0.05 * n,
+                              "p_at_least_n_pass_if_independent": float(binom.sf(n_pass - 1, n, 0.05))}
     save(summary, ROOT / "results" / "summary.json")
 
 

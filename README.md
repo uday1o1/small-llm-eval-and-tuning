@@ -12,7 +12,7 @@ The bpb, fine-tuning and benchmark runs go through [nanolm](https://github.com/l
 
 ## Results
 
-Means ± std are over 5 seeds (1337, 42, 1, 2, 3). Differences between settings are paired over seeds (t-test). A difference below twice the noise floor of the two settings compared (the median of their within-setting stds) is treated as not resolved.
+Means ± std are over 5 seeds (1337, 42, 1, 2, 3). Differences between settings are paired over seeds (t-test). A difference below twice the noise floor of the two settings compared (the mean of their two within-setting stds) is treated as not resolved.
 
 ### Small models
 
@@ -57,8 +57,10 @@ On every question of each evaluation set (HellaSwag: the validation set), with M
 | Qwen3-0.6B-Base GSM8K, 4-shot chain of thought vs 5-shot | 300 | 0.530 | 0.610 (p = 0.0071) | 0.596 |
 | SmolLM2-360M-Instruct GSM8K, chat template vs none | 100 | 0.020 | 0.070 (p = 0.18) | 0.0743 |
 | Qwen2.5-0.5B-Instruct GSM8K, chat template vs none | 100 | 0.340 | 0.360 (p = 0.85) | 0.496 |
+| SmolLM2-360M-Instruct GSM8K, chat template and chain of thought vs none | 100 | 0.020 | 0.060 (p = 0.22) | 0.0743 |
+| Qwen2.5-0.5B-Instruct GSM8K, chat template and chain of thought vs none | 100 | 0.340 | 0.390 (p = 0.44) | 0.496 |
 
-GSM8K uses lm_eval's prompts on the first 300 questions (base models) or 100 (instruct models). Qwen states no setting for its instruct model, so that row uses the chat template, as SmolLM2's evaluation does. Few-shot prompts close most of the ARC-Challenge and MMLU gaps, and the chain-of-thought prompt the GSM8K gaps; the shot count alone and the chat template do not resolve anything.
+GSM8K uses lm_eval's prompts on the first 300 questions (base models) or 100 (instruct models). Qwen3 states a chain-of-thought prompt, Qwen2.5's report gives only "4-shot", so both of lm_eval's 4-shot prompts are run. Qwen states no setting for its instruct model, so that model runs with the chat template, as SmolLM2's evaluation does, with and without chain of thought. Few-shot prompts close most of the ARC-Challenge and MMLU gaps and the chain-of-thought prompt the base models' GSM8K gaps; the shot count alone and the chat template resolve nothing, and Qwen2.5-0.5B-Instruct's published GSM8K stays unexplained (0.39 with the chat template and chain of thought, p = 0.44, against 0.496).
 
 ### The scoring rule (ARC-Easy)
 
@@ -98,7 +100,7 @@ GSM8K uses lm_eval's prompts on the first 300 questions (base models) or 100 (in
 - The reward accuracy starts at 0.5 by construction (the reference is the untuned model, so every margin is 0 and a tie counts half). On nanolm's 100 held-out pairs no two β values differ beyond the noise; on all 240 held-out pairs (every test-split pair nanolm's filter keeps) β 0.5 beats β 0.05 by 0.0225 (p = 0.006).
 - The margin grows with β because it is β times a log-ratio difference, and that difference shrinks as β grows: a larger β holds the policy closer to the reference. Both answers lose probability under the policy; per token the rejected answer loses 2.0 to 3.1 times as much as the chosen one.
 - The policy's own preference for the chosen answer moves little: from 0.650 to 0.683 at β 0.05 (p < 0.0001) and to 0.655 at β 0.5 (p = 0.07).
-- The answers get longer. On the 14 held-out prompts the untuned model answers in at most 20 tokens, the tuned model starts with the same answer in 8 to 11 per run and makes it longer in 6 to 9, by appending an explanation. The chosen answer is the longer one in 58.3% of the held-out pairs.
+- The answers get longer. On the 14 held-out prompts the untuned model answers in at most 20 tokens, the tuned model starts with the same answer in 8 to 11 per run and makes it longer in 6 to 9, usually by appending an explanation. The chosen answer is the longer one in 58.3% of the held-out pairs.
 - Of the 15 benchmark changes only HellaSwag at β 0.5 (−1.1 points) passes the rule. GSM8K falls on every seed at β 0.05 and 0.1 (by 3 to 6 points of 100 questions), with intervals too wide to resolve it. 3 of the 30 SFT and DPO changes pass; a 95% interval alone would exclude 0 for about 1.5 of 30 changes by chance (3 or more with probability 0.19 if they were independent).
 
 ### Qwen3.5-2B against Qwen3-1.7B
@@ -126,7 +128,7 @@ Parameter counts are of the language model (Qwen3.5-2B's vision encoder and mult
 | `configs/benchmarks/` | `laptop.yaml` (nanolm's `B2_laptop.yaml` verbatim, comments included, with only the output directory changed), `models.yaml` (all eight models), `full.yaml` (every question), `cloze.yaml` and `cloze_qwen3.5.yaml` (MMLU cloze form), `cards.yaml` (the publishers' settings), `sft.yaml` and `dpo.yaml` (every adapter) |
 | `runs/bpb/`, `runs/crosscheck/` | FineWeb bpb records; crosscheck logs, the lm_eval run with its per-question records, and per-choice scores for all 2,376 ARC-Easy questions (`arc_easy_scores.csv`) |
 | `runs/benchmarks/<config>/<model>/` | lm_eval results per task group and `stdout.log`; except under `laptop/`, `items.csv.gz` (one row per question, and per answer filter for GSM8K: correct and chosen answer, scores); `summary.csv` per config |
-| `runs/sft/`, `runs/dpo/` | nanolm's record of every run (`config.yaml`, `meta.json`, `train_log.jsonl`, `eval_log.jsonl`, `metrics.json`, `samples_before.txt`, `samples_after.txt`, `stdout.log`), `posthoc.json` and `generations.jsonl`; `base/` for the untuned model; `summary.csv`/`summary.md` from `python -m nanolm.analyze`; `runs/dpo/pair_lengths.json` |
+| `runs/sft/`, `runs/dpo/` | nanolm's record of every run (`config.yaml`, `meta.json`, `train_log.jsonl`, `eval_log.jsonl`, `metrics.json`, `samples_before.txt`, `samples_after.txt`, `stdout.log`), `posthoc.json` and `generations.jsonl`; `base/` for the untuned model; `summary.csv`/`summary.md` from `python -m nanolm.analyze` (it labels every metric "lower is better" and its printed noise floor "bpb", which for DPO's reward accuracy read the other way and in the metric's own units; it then stops at its curve plot, and `analyze_stdout.txt` holds that error ahead of the printed table); `runs/dpo/pair_lengths.json` |
 | `runs/token_budget.json` | training tokens of every SFT and DPO run |
 | `results/` | `summary.json`, `environment.txt`, `architecture/` (pinned config.json files, `architecture.json`) |
 | `analysis/` | `summarize.py`, `figures.py`, `common.py` |
@@ -137,7 +139,7 @@ lm_eval's full per-question records (prompts, log-likelihoods, generated answers
 
 ## Reproducing
 
-Requires Python 3.11 and one NVIDIA GPU with 24 GB. All runs used one RTX 4090 (`results/environment.txt`), except the publisher-setting runs (`cards.yaml`), which used other RTX 4090s with the same packages; PyTorch 2.8.0 with CUDA 12.8, and fp32 weights for every evaluation and tuning run (bf16 for the architecture cache measurement). nanolm enables TF32 matrix products for bpb, SFT and DPO; lm_eval does not. nanolm's run records label the device "precision=bfloat16", but its fine-tuning code never casts.
+Requires Python 3.11 and one NVIDIA GPU with 24 GB. All runs used one RTX 4090 machine (`results/environment.txt`), except the publisher-setting runs (`cards.yaml`), which used three other rented RTX 4090 machines with the same packages (each lm_eval results file records its machine); PyTorch 2.8.0 with CUDA 12.8, and fp32 weights for every evaluation and tuning run (bf16 for the architecture cache measurement). nanolm enables TF32 matrix products for bpb, SFT and DPO; lm_eval does not. nanolm's run records label the device "precision=bfloat16", but its fine-tuning code never casts.
 
 ```bash
 bash scripts/setup.sh          # clone nanolm at commit 8418fc1 into external/, install requirements
@@ -149,7 +151,7 @@ python analysis/figures.py     # figures/*.png (no GPU)
 
 - `run_all.sh` stages: `prepare bpb crosscheck benchmarks sft dpo tuned_benchmarks posthoc architecture analyze` (any subset can be named). `SLOTS` (default 4) jobs of the bpb, crosscheck, sft, dpo and posthoc stages and `BSLOTS` (default 2) benchmark jobs share the GPU; a benchmark job that fails, for example out of memory, is retried alone.
 - Qwen3.5 runs on transformers' PyTorch implementation of Gated DeltaNet: flash-linear-attention and causal-conv1d are not installed.
-- **Time.** Recorded GPU time is 2.3 hours of fine-tuning (30 runs) and 16.3 hours of lm_eval (114 runs); jobs shared the GPU, mostly two at a time, so these times overlap.
+- **Time.** Recorded GPU time is 2.3 hours of fine-tuning (30 runs) and 16.4 hours of lm_eval (116 runs); jobs shared the GPU, mostly two at a time, so these times overlap.
 - **Without a GPU.** `summarize.py` and `figures.py` rebuild every number and figure from the committed `runs/` and `results/architecture/`, with the analysis packages of `requirements.txt` (numpy, pandas, scipy, matplotlib); other versions or platforms can change the last floating-point digits.
 
 ## Limitations
@@ -158,4 +160,4 @@ python analysis/figures.py     # figures/*.png (no GPU)
 - **Evaluation.** 0-shot log-likelihood scoring (GSM8K: 5-shot generation, exact match with lm_eval's flexible-extract filter), without chat templates or chain of thought except in the publisher-setting test; every question of each evaluation set and the cloze form only for the base models; GSM8K comparisons of the instruct models and tuned adapters on 100 questions.
 - **Samples.** Judged by counts over 50 held-out prompts and by reading, not by a reward model or human raters.
 - **Statistics.** Paired t-tests over 5 seeds, McNemar tests and question-bootstrap intervals, without correction for multiple comparisons (`summary.json` also gives Holm-corrected counts for the model pairs).
-- **Models.** Below 0.5B parameters the models are GPT-2 and SmolLM2, at and above it Qwen, so size and model family are confounded.
+- **Models.** Up to 0.36B parameters the models are GPT-2 and SmolLM2, from 0.49B up Qwen, so size and model family are confounded.

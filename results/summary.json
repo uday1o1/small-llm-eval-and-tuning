@@ -3600,8 +3600,8 @@
    "sft": 1.3747222222222222,
    "dpo": 0.8998888888888888
   },
-  "lm_eval_runs": 114,
-  "lm_eval_hours": 16.31815620086421,
+  "lm_eval_runs": 116,
+  "lm_eval_hours": 16.38635845896277,
   "bpb_hours": 0.015583333333333334
  },
  "cards": {
@@ -3652,6 +3652,30 @@
    "a_only": 12,
    "b_only": 14,
    "p": 0.8450189828872681
+  },
+  "SmolLM2-360M-Instruct GSM8K chat template with chain of thought vs none": {
+   "model": "SmolLM2-360M-Instruct",
+   "task": "gsm8k",
+   "n": 100,
+   "publisher_setting": 0.06,
+   "ours": 0.02,
+   "diff": 0.04,
+   "se_diff": 0.024166091947189147,
+   "a_only": 1,
+   "b_only": 5,
+   "p": 0.21875
+  },
+  "Qwen2.5-0.5B-Instruct GSM8K chat template with chain of thought vs none": {
+   "model": "Qwen2.5-0.5B-Instruct",
+   "task": "gsm8k",
+   "n": 100,
+   "publisher_setting": 0.39,
+   "ours": 0.34,
+   "diff": 0.05,
+   "se_diff": 0.051720402163943004,
+   "a_only": 11,
+   "b_only": 16,
+   "p": 0.44206833839416504
   },
   "Qwen2.5-0.5B GSM8K 4-shot vs 5-shot": {
    "model": "Qwen2.5-0.5B",
@@ -7869,5 +7893,11 @@
     "gap": -0.09703722517058377
    }
   }
+ },
+ "rule_passes": {
+  "n_changes": 30,
+  "n_pass": 3,
+  "expected_by_chance_95": 1.5,
+  "p_at_least_n_pass_if_independent": 0.18782118685303928
  }
 }

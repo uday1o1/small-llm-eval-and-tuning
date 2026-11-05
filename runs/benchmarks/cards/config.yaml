@@ -1,8 +1,9 @@
 # The publishers' settings where they differ from ours, to test what explains the gaps to the published
 # numbers: Qwen2.5-0.5B ARC-Challenge 25-shot, Qwen3-0.6B-Base MMLU 5-shot, GSM8K 4-shot with lm_eval's
 # standard and chain-of-thought prompts for both Qwen base models (first 300 questions), and the instruct
-# models' GSM8K with their chat template (few-shot examples as earlier turns; the first 100 questions, as
-# in models.yaml). Each group runs only on the models it tests.
+# models' GSM8K with their chat template (few-shot examples as earlier turns), with the standard 5-shot and
+# the 4-shot chain-of-thought prompt (the first 100 questions, as in models.yaml). Each group runs only on
+# the models it tests.
 #   python scripts/bench.py run -c configs/benchmarks/cards.yaml --slots 2
 name: cards
 out_dir: runs/benchmarks
@@ -32,6 +33,12 @@ task_groups:
   gsm8k_chat:
     tasks: [gsm8k]
     num_fewshot: 5
+    limit: 100
+    chat_only: true
+    use_chat_template: true
+  gsm8k_cot_chat:
+    tasks: [gsm8k_cot]
+    num_fewshot: 4
     limit: 100
     chat_only: true
     use_chat_template: true

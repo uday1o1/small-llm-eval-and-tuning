@@ -2,6 +2,6 @@ task                  arc_challenge                                 gsm8k       
 metric                          acc acc_norm exact_match_flexible-extract exact_match_strict-match exact_match_flexible-extract exact_match_strict-match    acc
 model                                                                                                                                                          
 Qwen2.5-0.5B                  0.346    0.348                        0.340                     0.34                        0.413                    0.377    NaN
-Qwen2.5-0.5B-Instruct           NaN      NaN                        0.360                     0.10                          NaN                      NaN    NaN
+Qwen2.5-0.5B-Instruct           NaN      NaN                        0.360                     0.10                        0.390                    0.150    NaN
 Qwen3-0.6B-Base                 NaN      NaN                        0.507                     0.50                        0.610                    0.520  0.525
-SmolLM2-360M-Instruct           NaN      NaN                        0.070                     0.06                          NaN                      NaN    NaN
+SmolLM2-360M-Instruct           NaN      NaN                        0.070                     0.06                        0.060                    0.060    NaN

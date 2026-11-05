@@ -7,6 +7,8 @@ Qwen2.5-0.5B,gsm8k_cot,exact_match_strict-match,0.37666666666666665,0.0280222611
 Qwen2.5-0.5B,gsm8k_cot,exact_match_flexible-extract,0.41333333333333333,0.028478055207315858,4.0
 Qwen2.5-0.5B-Instruct,gsm8k,exact_match_strict-match,0.1,0.030151134457776334,5.0
 Qwen2.5-0.5B-Instruct,gsm8k,exact_match_flexible-extract,0.36,0.04824181513244218,5.0
+Qwen2.5-0.5B-Instruct,gsm8k_cot,exact_match_strict-match,0.15,0.03588702812826371,4.0
+Qwen2.5-0.5B-Instruct,gsm8k_cot,exact_match_flexible-extract,0.39,0.04902071300001975,4.0
 Qwen3-0.6B-Base,gsm8k,exact_match_strict-match,0.5,0.02891574659831201,4.0
 Qwen3-0.6B-Base,gsm8k,exact_match_flexible-extract,0.5066666666666667,0.028913176195480332,4.0
 Qwen3-0.6B-Base,gsm8k_cot,exact_match_strict-match,0.52,0.028892604740584655,4.0
@@ -75,3 +77,5 @@ Qwen3-0.6B-Base,mmlu_high_school_statistics,acc,0.5046296296296297,0.03409825519
 Qwen3-0.6B-Base,mmlu_machine_learning,acc,0.35714285714285715,0.04547960999764376,5.0
 SmolLM2-360M-Instruct,gsm8k,exact_match_strict-match,0.06,0.023868325657594194,5.0
 SmolLM2-360M-Instruct,gsm8k,exact_match_flexible-extract,0.07,0.02564323999762428,5.0
+SmolLM2-360M-Instruct,gsm8k_cot,exact_match_strict-match,0.06,0.023868325657594187,4.0
+SmolLM2-360M-Instruct,gsm8k_cot,exact_match_flexible-extract,0.06,0.023868325657594187,4.0
