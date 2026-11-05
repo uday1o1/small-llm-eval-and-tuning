@@ -1,0 +1,15 @@
+{
+ "name": "sft_n2000",
+ "seed": 1,
+ "date": "2026-11-05T08:45:17",
+ "git": {
+  "commit": "8418fc1bae85657190f11749483bf2e729b9702c",
+  "branch": "HEAD",
+  "dirty": false
+ },
+ "host": "76f4bdf6c9a0",
+ "platform": "Linux-5.15.0-91-generic-x86_64-with-glibc2.35",
+ "torch": "2.8.0+cu128",
+ "device": "cuda (precision=bfloat16, compile=yes)",
+ "command": "/root/repo/external/DeepDataMiningLearning/DeepDataMiningLearning/llm/nanolm/finetune.py -c configs/finetune/sft.yaml data.n_train=2000 seed=1 name=sft_n2000 run_dir=runs/sft/n2000_s1"
+}

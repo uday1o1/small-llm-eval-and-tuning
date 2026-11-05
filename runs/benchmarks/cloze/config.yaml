@@ -1,0 +1,14 @@
+# mmlu_cloze for Qwen3.5-0.8B-Base, written to the same directory as cloze.yaml. Its 248k-token
+# vocabulary makes fp32 log-softmax over batches of 8 long MMLU continuations exceed 24 GB, so this
+# model runs at batch size 2 (the batch size changes only how requests are grouped, not what is scored).
+#   python scripts/bench.py run -c configs/benchmarks/cloze_qwen3.5.yaml --slots 1
+name: cloze
+out_dir: runs/benchmarks
+batch_size: 2
+device: auto
+models:
+  - {name: Qwen3.5-0.8B-Base,     hf: Qwen/Qwen3.5-0.8B-Base,               dtype: float32}
+task_groups:
+  mmlu_cloze:
+    tasks: [mmlu_continuation]
+    num_fewshot: 0

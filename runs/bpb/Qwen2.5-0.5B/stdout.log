@@ -1,0 +1,4 @@
+[run] runs/bpb/Qwen2.5-0.5B
+[run] eval_bpb | Qwen/Qwen2.5-0.5B | device cuda (precision=bfloat16, compile=yes)
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  35%|███▌      | 102/290 [00:00<00:00, 1013.54it/s]Loading weights:  84%|████████▍ | 243/290 [00:00<00:00, 1230.37it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1280.50it/s]
+[eval_bpb] Qwen/Qwen2.5-0.5B: val_bpb 0.9511 on 200 docs (4.57 bytes/token)

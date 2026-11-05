@@ -1,0 +1,8 @@
+# Instruction tuning (SFT) with LoRA: nanolm's configs/part2/P2_sft_alpaca.yaml with fp32 weights
+# (nanolm's `auto` would load bf16 on CUDA) and no wall-clock cap (max_time_sec 0), so every run
+# completes its steps. The training-set size is set per run with
+# data.n_train=500|2000|8000; every run takes 250 steps x 16 examples = 4,000 examples.
+name: sft
+model: {name: "HuggingFaceTB/SmolLM2-360M", dtype: fp32, lora: true, lora_r: 16}
+data: {format: alpaca, dataset: "yahma/alpaca-cleaned", n_train: 2000, n_val: 100, max_len: 384}
+train: {method: sft, steps: 250, batch_size: 4, grad_accum: 4, lr: 2e-4, warmup_steps: 20, eval_every: 50, max_time_sec: 0}

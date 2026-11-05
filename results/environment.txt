@@ -1,0 +1,31 @@
+# Environment of every run (recorded on the machine that ran them)
+name, driver_version, memory.total [MiB]
+NVIDIA GeForce RTX 4090, 580.119.02, 24564 MiB
+
+CPU(s):                             32
+Model name:                         AMD EPYC 9654 96-Core Processor
+
+python 3.11.13
+torch 2.8.0+cu128 cuda 12.8 cudnn 91002
+
+nanolm: 8418fc1bae85657190f11749483bf2e729b9702c (clean: yes)
+
+accelerate==1.15.0
+brotli==1.2.1
+datasets==5.1.0
+huggingface_hub==2.4.0
+immutabledict==4.3.1
+langdetect==1.0.9
+lm_eval==0.4.11
+matplotlib==3.11.2
+numpy==2.3.2
+pandas==3.1.1
+peft==0.21.2
+PyYAML==6.0.2
+safetensors==0.8.0
+scipy==1.17.1
+sentencepiece==0.2.2
+tabulate==0.10.0
+tiktoken==0.14.0
+torch==2.8.0+cu128
+transformers==5.22.1

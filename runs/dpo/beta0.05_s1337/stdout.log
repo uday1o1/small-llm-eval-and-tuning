@@ -1,0 +1,21 @@
+[run] runs/dpo/beta0.05_s1337
+[run] dpo | Qwen/Qwen2.5-0.5B-Instruct | device cuda (precision=bfloat16, compile=yes)
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  53%|█████▎    | 153/290 [00:00<00:00, 1480.51it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1526.63it/s]
+[model] 503M params, 8.80M trainable (1.75% LoRA)
+[data] 800 train / 100 val examples (ultrafeedback, max_len 512)
+[eval] before: {'val_reward_acc': 0.5, 'val_reward_margin': 0.0, 'val_policy_prefers_chosen': 0.61}
+step    10 | loss 0.6909 | reward_acc 0.5813 | margin 0.0054 | 24s | mem 2.7 GB
+step    20 | loss 0.6431 | reward_acc 0.7375 | margin 0.1187 | 47s | mem 2.7 GB
+  eval: {'val_reward_acc': 0.58, 'val_reward_margin': 0.2952, 'val_policy_prefers_chosen': 0.6}
+step    30 | loss 0.5681 | reward_acc 0.7875 | margin 0.4267 | 60s | mem 2.7 GB
+step    40 | loss 0.5989 | reward_acc 0.7000 | margin 0.4463 | 86s | mem 2.7 GB
+step    50 | loss 0.5613 | reward_acc 0.7875 | margin 0.5776 | 109s | mem 2.7 GB
+  eval: {'val_reward_acc': 0.68, 'val_reward_margin': 0.41, 'val_policy_prefers_chosen': 0.65}
+step    60 | loss 0.5682 | reward_acc 0.6750 | margin 0.4509 | 133s | mem 2.7 GB
+step    70 | loss 0.5953 | reward_acc 0.7625 | margin 0.5105 | 157s | mem 2.7 GB
+  eval: {'val_reward_acc': 0.66, 'val_reward_margin': 0.4677, 'val_policy_prefers_chosen': 0.65}
+step    80 | loss 0.4969 | reward_acc 0.7937 | margin 0.7329 | 169s | mem 2.7 GB
+step    90 | loss 0.5546 | reward_acc 0.7000 | margin 0.6291 | 193s | mem 2.7 GB
+step   100 | loss 0.5409 | reward_acc 0.7125 | margin 0.6293 | 218s | mem 2.7 GB
+[eval] after: {'val_reward_acc': 0.66, 'val_reward_margin': 0.4777, 'val_policy_prefers_chosen': 0.65}
+[done] runs/dpo/beta0.05_s1337  (compare samples_before.txt vs samples_after.txt)

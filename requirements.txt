@@ -1,0 +1,20 @@
+# Versions used for every run and figure (see results/environment.txt).
+torch==2.8.0
+transformers==5.22.1
+peft==0.21.2
+accelerate==1.15.0
+lm_eval==0.4.11
+datasets==5.1.0
+huggingface_hub==2.4.0
+safetensors==0.8.0
+brotli==1.2.1
+numpy==2.3.2
+pyyaml==6.0.2
+pandas==3.1.1
+scipy==1.17.1
+matplotlib==3.11.2
+sentencepiece==0.2.2
+tiktoken==0.14.0
+tabulate==0.10.0
+langdetect==1.0.9
+immutabledict==4.3.1

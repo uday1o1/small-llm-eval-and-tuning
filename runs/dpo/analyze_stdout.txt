@@ -1,0 +1,32 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/root/repo/external/DeepDataMiningLearning/DeepDataMiningLearning/llm/nanolm/analyze.py", line 174, in <module>
+    main()
+  File "/root/repo/external/DeepDataMiningLearning/DeepDataMiningLearning/llm/nanolm/analyze.py", line 169, in main
+    plot(df, load_curves(df), summary, metric, out_dir)
+  File "/root/repo/external/DeepDataMiningLearning/DeepDataMiningLearning/llm/nanolm/analyze.py", line 108, in plot
+    m = c.groupby("train_tokens")["bpb"].agg(["mean", "std"]).reset_index()
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/pandas/util/_decorators.py", line 335, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/pandas/core/frame.py", line 13788, in groupby
+    return DataFrameGroupBy(
+           ^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/pandas/core/groupby/groupby.py", line 849, in __init__
+    grouper, exclusions, obj = get_grouper(
+                               ^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/site-packages/pandas/core/groupby/grouper.py", line 925, in get_grouper
+    raise KeyError(gpr)
+KeyError: 'train_tokens'
+
+metric = after_val_reward_acc  (lower is better)
+
+              n_seeds  after_val_reward_acc_mean  after_val_reward_acc_std  params_M  train_min  delta_vs_dpo_beta0.1  paired_p
+name                                                                                                                           
+dpo_beta0.05        5                     0.6820                    0.0179  502.8310     3.6750               -0.0140    0.2635
+dpo_beta0.5         5                     0.6920                    0.0286  502.8310     3.5093               -0.0040    0.8574
+dpo_beta0.1         5                     0.6960                    0.0297  502.8310     3.6143                0.0000       NaN
+
+seed noise floor: median within-experiment std = 0.0286 bpb (differences below ~2x this are not trustworthy without more seeds)

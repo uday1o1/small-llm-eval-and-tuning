@@ -1,0 +1,21 @@
+# The tasks of models.yaml on every question of each test set (no limit), base models only: how far
+# are the first-300 subsets from the full-set scores?
+#   python scripts/bench.py run -c configs/benchmarks/full.yaml --slots 4
+name: full
+out_dir: runs/benchmarks
+batch_size: 8
+device: auto
+models:
+  - {name: gpt2-124M,             hf: gpt2,                                 dtype: float32}
+  - {name: SmolLM2-135M,          hf: HuggingFaceTB/SmolLM2-135M,           dtype: float32}
+  - {name: SmolLM2-360M,          hf: HuggingFaceTB/SmolLM2-360M,           dtype: float32}
+  - {name: Qwen2.5-0.5B,          hf: Qwen/Qwen2.5-0.5B,                    dtype: float32}
+  - {name: Qwen3-0.6B-Base,       hf: Qwen/Qwen3-0.6B-Base,                 dtype: float32}
+  - {name: Qwen3.5-0.8B-Base,     hf: Qwen/Qwen3.5-0.8B-Base,               dtype: float32}
+task_groups:
+  knowledge:
+    tasks: [arc_easy, arc_challenge, hellaswag, mmlu]
+    num_fewshot: 0
+  math:
+    tasks: [gsm8k]
+    num_fewshot: 5

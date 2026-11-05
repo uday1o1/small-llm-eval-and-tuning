@@ -1,0 +1,4 @@
+{"step": 25, "val_reward_acc": 0.64, "val_reward_margin": 1.24684663772583, "val_policy_prefers_chosen": 0.6}
+{"step": 50, "val_reward_acc": 0.67, "val_reward_margin": 0.912356390953064, "val_policy_prefers_chosen": 0.6}
+{"step": 75, "val_reward_acc": 0.69, "val_reward_margin": 1.0829278469085692, "val_policy_prefers_chosen": 0.6}
+{"step": 100, "val_reward_acc": 0.69, "val_reward_margin": 1.129976477622986, "val_policy_prefers_chosen": 0.6}

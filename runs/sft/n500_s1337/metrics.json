@@ -1,0 +1,19 @@
+{
+ "name": "sft_n500",
+ "seed": 1337,
+ "method": "sft",
+ "model": "HuggingFaceTB/SmolLM2-360M",
+ "params": 370504640,
+ "trainable_params": 8683520,
+ "device": "cuda (precision=bfloat16, compile=yes)",
+ "dtype": "float32",
+ "before_val_response_nll": 1.5560328210785297,
+ "before_val_response_ppl": 4.739979548705241,
+ "after_val_response_nll": 1.3660712330685116,
+ "after_val_response_ppl": 3.9199199515405976,
+ "steps": 250,
+ "train_time_sec": 384.2,
+ "peak_mem_mb": 1912.2,
+ "n_train_examples": 500,
+ "n_val_examples": 100
+}

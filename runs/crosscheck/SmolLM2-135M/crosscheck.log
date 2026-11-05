@@ -1,0 +1,2 @@
+Loading weights:   0%|          | 0/272 [00:00<?, ?it/s]Loading weights:  94%|█████████▍| 256/272 [00:00<00:00, 2545.26it/s]Loading weights: 100%|██████████| 272/272 [00:00<00:00, 2597.11it/s]
+[crosscheck] HuggingFaceTB/SmolLM2-135M (fp32) ARC-Easy test (n=300): acc 0.5833  acc_norm 0.5533  (27s, our 60-line scorer)

@@ -1,0 +1,2 @@
+Loading weights:   0%|          | 0/272 [00:00<?, ?it/s]Loading weights: 100%|██████████| 272/272 [00:00<00:00, 3307.89it/s]
+{"model": "HuggingFaceTB/SmolLM2-135M", "n_questions": 2376, "first300_mc_accuracy": {"acc": 0.5833333333333334, "acc_norm": 0.5533333333333333, "n": 300}, "full": {"acc": 0.6443602693602694, "acc_norm_chars": 0.5858585858585859, "acc_norm_tokens": 0.5942760942760943}, "first300_acc_norm_tokens": 0.55}

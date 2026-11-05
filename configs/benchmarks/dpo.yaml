@@ -1,0 +1,31 @@
+# The tasks of models.yaml for every DPO adapter (base model Qwen2.5-0.5B-Instruct): did preference tuning change the scores?
+#   python scripts/bench.py run -c configs/benchmarks/dpo.yaml --slots 4
+name: dpo
+out_dir: runs/benchmarks
+batch_size: 8
+device: auto
+models:
+  - {name: beta0.05_s1337, hf: Qwen/Qwen2.5-0.5B-Instruct, peft: runs/dpo/beta0.05_s1337/adapter, dtype: float32}
+  - {name: beta0.05_s42, hf: Qwen/Qwen2.5-0.5B-Instruct, peft: runs/dpo/beta0.05_s42/adapter, dtype: float32}
+  - {name: beta0.05_s1, hf: Qwen/Qwen2.5-0.5B-Instruct, peft: runs/dpo/beta0.05_s1/adapter, dtype: float32}
+  - {name: beta0.05_s2, hf: Qwen/Qwen2.5-0.5B-Instruct, peft: runs/dpo/beta0.05_s2/adapter, dtype: float32}
+  - {name: beta0.05_s3, hf: Qwen/Qwen2.5-0.5B-Instruct, peft: runs/dpo/beta0.05_s3/adapter, dtype: float32}
+  - {name: beta0.1_s1337, hf: Qwen/Qwen2.5-0.5B-Instruct, peft: runs/dpo/beta0.1_s1337/adapter, dtype: float32}
+  - {name: beta0.1_s42, hf: Qwen/Qwen2.5-0.5B-Instruct, peft: runs/dpo/beta0.1_s42/adapter, dtype: float32}
+  - {name: beta0.1_s1, hf: Qwen/Qwen2.5-0.5B-Instruct, peft: runs/dpo/beta0.1_s1/adapter, dtype: float32}
+  - {name: beta0.1_s2, hf: Qwen/Qwen2.5-0.5B-Instruct, peft: runs/dpo/beta0.1_s2/adapter, dtype: float32}
+  - {name: beta0.1_s3, hf: Qwen/Qwen2.5-0.5B-Instruct, peft: runs/dpo/beta0.1_s3/adapter, dtype: float32}
+  - {name: beta0.5_s1337, hf: Qwen/Qwen2.5-0.5B-Instruct, peft: runs/dpo/beta0.5_s1337/adapter, dtype: float32}
+  - {name: beta0.5_s42, hf: Qwen/Qwen2.5-0.5B-Instruct, peft: runs/dpo/beta0.5_s42/adapter, dtype: float32}
+  - {name: beta0.5_s1, hf: Qwen/Qwen2.5-0.5B-Instruct, peft: runs/dpo/beta0.5_s1/adapter, dtype: float32}
+  - {name: beta0.5_s2, hf: Qwen/Qwen2.5-0.5B-Instruct, peft: runs/dpo/beta0.5_s2/adapter, dtype: float32}
+  - {name: beta0.5_s3, hf: Qwen/Qwen2.5-0.5B-Instruct, peft: runs/dpo/beta0.5_s3/adapter, dtype: float32}
+task_groups:
+  knowledge:
+    tasks: [arc_easy, arc_challenge, hellaswag, mmlu]
+    num_fewshot: 0
+    limit: 300            # the first 300 questions per task (per MMLU subject)
+  math:
+    tasks: [gsm8k]
+    num_fewshot: 5
+    limit: 100

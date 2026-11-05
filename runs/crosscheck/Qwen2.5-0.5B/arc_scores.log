@@ -1,0 +1,2 @@
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  39%|███▉      | 113/290 [00:00<00:00, 1125.71it/s]Loading weights:  92%|█████████▏| 267/290 [00:00<00:00, 1364.84it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1370.80it/s]
+{"model": "Qwen/Qwen2.5-0.5B", "n_questions": 2376, "first300_mc_accuracy": {"acc": 0.5966666666666667, "acc_norm": 0.57, "n": 300}, "full": {"acc": 0.6460437710437711, "acc_norm_chars": 0.5867003367003367, "acc_norm_tokens": 0.5787037037037037}, "first300_acc_norm_tokens": 0.5533333333333333}

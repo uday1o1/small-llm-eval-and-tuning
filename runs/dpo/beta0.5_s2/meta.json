@@ -1,0 +1,15 @@
+{
+ "name": "dpo_beta0.5",
+ "seed": 2,
+ "date": "2026-11-05T09:47:13",
+ "git": {
+  "commit": "8418fc1bae85657190f11749483bf2e729b9702c",
+  "branch": "HEAD",
+  "dirty": false
+ },
+ "host": "76f4bdf6c9a0",
+ "platform": "Linux-5.15.0-91-generic-x86_64-with-glibc2.35",
+ "torch": "2.8.0+cu128",
+ "device": "cuda (precision=bfloat16, compile=yes)",
+ "command": "/root/repo/external/DeepDataMiningLearning/DeepDataMiningLearning/llm/nanolm/finetune.py -c configs/finetune/dpo.yaml train.dpo_beta=0.5 seed=2 name=dpo_beta0.5 run_dir=runs/dpo/beta0.5_s2"
+}

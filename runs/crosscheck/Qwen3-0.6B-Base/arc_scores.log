@@ -1,0 +1,2 @@
+Loading weights:   0%|          | 0/310 [00:00<?, ?it/s]Loading weights:  51%|█████     | 157/310 [00:00<00:00, 1537.72it/s]Loading weights: 100%|██████████| 310/310 [00:00<00:00, 1652.61it/s]
+{"model": "Qwen/Qwen3-0.6B-Base", "n_questions": 2376, "first300_mc_accuracy": {"acc": 0.61, "acc_norm": 0.5433333333333333, "n": 300}, "full": {"acc": 0.6531986531986532, "acc_norm_chars": 0.5795454545454546, "acc_norm_tokens": 0.5715488215488216}, "first300_acc_norm_tokens": 0.5533333333333333}

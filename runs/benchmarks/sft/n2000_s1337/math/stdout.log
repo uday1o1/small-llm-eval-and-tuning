@@ -1,0 +1,27 @@
+2026-11-05:10:48:25 WARNING  [config.evaluate_config:281] --limit SHOULD ONLY BE USED FOR TESTING. REAL METRICS SHOULD NOT BE COMPUTED USING LIMIT.
+2026-11-05:10:48:27 INFO     [_cli.run:376] Selected Tasks: ['gsm8k']
+2026-11-05:10:48:28 INFO     [evaluator:211] Setting random seed to 1234 | Setting numpy seed to 1234 | Setting torch manual seed to 1234 | Setting fewshot manual seed to 1234
+2026-11-05:10:48:28 INFO     [evaluator:236] Initializing hf model, with arguments: {'pretrained': 'HuggingFaceTB/SmolLM2-360M', 'dtype': 'float32', 'peft': 'runs/sft/n2000_s1337/adapter'}
+2026-11-05:10:48:29 INFO     [models.huggingface:161] Using device 'cuda'
+2026-11-05:10:48:31 INFO     [models.huggingface:423] Model parallel was set to False, max memory was not set, and device map was set to {'': 'cuda'}
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  42%|████▏     | 122/290 [00:00<00:00, 1215.59it/s]Loading weights:  97%|█████████▋| 280/290 [00:00<00:00, 1427.95it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1420.58it/s]
+2026-11-05:10:48:34 INFO     [tasks:700] Selected tasks:
+2026-11-05:10:48:34 INFO     [tasks:691] Task: gsm8k (gsm8k/gsm8k.yaml)
+2026-11-05:10:48:34 INFO     [evaluator:314] gsm8k: Using gen_kwargs: {'until': ['Question:', '</s>', '<|im_end|>'], 'do_sample': False, 'temperature': 0.0}
+2026-11-05:10:48:34 WARNING  [evaluator:333] Overwriting default num_fewshot of gsm8k from 5 to 5
+2026-11-05:10:48:34 INFO     [api.task:311] Building contexts for gsm8k on rank 0...
+  0%|          | 0/100 [00:00<?, ?it/s] 47%|████▋     | 47/100 [00:00<00:00, 462.51it/s] 94%|█████████▍| 94/100 [00:00<00:00, 466.60it/s]100%|██████████| 100/100 [00:00<00:00, 465.63it/s]
+2026-11-05:10:48:34 INFO     [evaluator:584] Running generate_until requests
+Running generate_until requests:   0%|          | 0/100 [00:00<?, ?it/s]Running generate_until requests:   1%|          | 1/100 [00:08<14:33,  8.82s/it]Running generate_until requests:   9%|▉         | 9/100 [00:17<02:33,  1.68s/it]Running generate_until requests:  17%|█▋        | 17/100 [00:30<02:15,  1.63s/it]Running generate_until requests:  25%|██▌       | 25/100 [00:39<01:46,  1.42s/it]Running generate_until requests:  33%|███▎      | 33/100 [00:48<01:28,  1.32s/it]Running generate_until requests:  41%|████      | 41/100 [01:00<01:22,  1.40s/it]Running generate_until requests:  49%|████▉     | 49/100 [01:12<01:11,  1.40s/it]Running generate_until requests:  57%|█████▋    | 57/100 [01:23<01:00,  1.40s/it]Running generate_until requests:  65%|██████▌   | 65/100 [01:34<00:48,  1.38s/it]Running generate_until requests:  73%|███████▎  | 73/100 [01:40<00:32,  1.19s/it]Running generate_until requests:  81%|████████  | 81/100 [01:50<00:23,  1.23s/it]Running generate_until requests:  89%|████████▉ | 89/100 [02:01<00:13,  1.25s/it]Running generate_until requests:  97%|█████████▋| 97/100 [02:10<00:03,  1.24s/it]Running generate_until requests: 100%|██████████| 100/100 [02:10<00:00,  1.31s/it]
+fatal: detected dubious ownership in repository at '/root/repo'
+To add an exception for this directory, call:
+
+	git config --global --add safe.directory /root/repo
+2026-11-05:10:50:48 INFO     [loggers.evaluation_tracker:247] Saving results aggregated
+2026-11-05:10:50:48 INFO     [loggers.evaluation_tracker:119] Saving per-task samples to runs/benchmarks/sft/n2000_s1337/math/runs__sft__n2000_s1337__adapter/*.jsonl
+hf ({'pretrained': 'HuggingFaceTB/SmolLM2-360M', 'dtype': 'float32', 'peft': 'runs/sft/n2000_s1337/adapter'}), gen_kwargs: ({}), limit: 100.0, num_fewshot: 5, batch_size: 8
+|Tasks|Version|     Filter     |n-shot|  Metric   |   |Value|   |Stderr|
+|-----|------:|----------------|-----:|-----------|---|----:|---|-----:|
+|gsm8k|      3|flexible-extract|     5|exact_match|↑  | 0.09|±  |0.0288|
+|     |       |strict-match    |     5|exact_match|↑  | 0.08|±  |0.0273|
+

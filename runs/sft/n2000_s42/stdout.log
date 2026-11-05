@@ -1,0 +1,37 @@
+[run] runs/sft/n2000_s42
+[run] sft | HuggingFaceTB/SmolLM2-360M | device cuda (precision=bfloat16, compile=yes)
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  88%|████████▊ | 254/290 [00:00<00:00, 2524.83it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 2587.91it/s]
+[model] 371M params, 8.68M trainable (2.34% LoRA)
+[data] 2000 train / 100 val examples (alpaca, max_len 384)
+[eval] before: {'val_response_nll': 1.556, 'val_response_ppl': 4.74}
+step    10 | loss 1.5171 | 12s | mem 1.9 GB
+step    20 | loss 1.4199 | 25s | mem 1.9 GB
+step    30 | loss 1.3559 | 38s | mem 1.9 GB
+step    40 | loss 1.3820 | 50s | mem 1.9 GB
+step    50 | loss 1.3233 | 63s | mem 1.9 GB
+  eval: {'val_response_nll': 1.3491, 'val_response_ppl': 3.8539}
+step    60 | loss 1.4512 | 75s | mem 1.9 GB
+step    70 | loss 1.3371 | 88s | mem 1.9 GB
+step    80 | loss 1.3241 | 101s | mem 1.9 GB
+step    90 | loss 1.3921 | 113s | mem 1.9 GB
+step   100 | loss 1.3028 | 125s | mem 1.9 GB
+  eval: {'val_response_nll': 1.3311, 'val_response_ppl': 3.7851}
+step   110 | loss 1.2698 | 138s | mem 1.9 GB
+step   120 | loss 1.3281 | 152s | mem 1.9 GB
+step   130 | loss 1.2660 | 165s | mem 1.9 GB
+step   140 | loss 1.3432 | 178s | mem 1.9 GB
+step   150 | loss 1.2606 | 191s | mem 1.9 GB
+  eval: {'val_response_nll': 1.3238, 'val_response_ppl': 3.7578}
+step   160 | loss 1.3619 | 204s | mem 1.9 GB
+step   170 | loss 1.2048 | 217s | mem 1.9 GB
+step   180 | loss 1.2490 | 231s | mem 1.9 GB
+step   190 | loss 1.3339 | 244s | mem 1.9 GB
+step   200 | loss 1.2954 | 257s | mem 1.9 GB
+  eval: {'val_response_nll': 1.3222, 'val_response_ppl': 3.7515}
+step   210 | loss 1.2791 | 270s | mem 1.9 GB
+step   220 | loss 1.3199 | 283s | mem 1.9 GB
+step   230 | loss 1.2315 | 296s | mem 1.9 GB
+step   240 | loss 1.2919 | 307s | mem 1.9 GB
+step   250 | loss 1.2692 | 320s | mem 1.9 GB
+[eval] after: {'val_response_nll': 1.3213, 'val_response_ppl': 3.7482}
+[done] runs/sft/n2000_s42  (compare samples_before.txt vs samples_after.txt)

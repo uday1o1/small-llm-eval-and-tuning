@@ -1,0 +1,9 @@
+task              humanities  other social sciences   stem
+metric                   acc    acc             acc    acc
+model                                                     
+Qwen2.5-0.5B           0.262  0.360           0.353  0.315
+Qwen3-0.6B-Base        0.275  0.381           0.374  0.384
+Qwen3.5-0.8B-Base      0.290  0.359           0.366  0.346
+SmolLM2-135M           0.267  0.344           0.331  0.271
+SmolLM2-360M           0.296  0.389           0.377  0.317
+gpt2-124M              0.245  0.279           0.274  0.227

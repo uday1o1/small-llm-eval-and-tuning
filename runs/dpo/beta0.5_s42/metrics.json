@@ -1,0 +1,21 @@
+{
+ "name": "dpo_beta0.5",
+ "seed": 42,
+ "method": "dpo",
+ "model": "Qwen/Qwen2.5-0.5B-Instruct",
+ "params": 502830976,
+ "trainable_params": 8798208,
+ "device": "cuda (precision=bfloat16, compile=yes)",
+ "dtype": "float32",
+ "before_val_reward_acc": 0.5,
+ "before_val_reward_margin": -3.1280517578125e-06,
+ "before_val_policy_prefers_chosen": 0.61,
+ "after_val_reward_acc": 0.71,
+ "after_val_reward_margin": 1.601204514503479,
+ "after_val_policy_prefers_chosen": 0.61,
+ "steps": 100,
+ "train_time_sec": 217.1,
+ "peak_mem_mb": 2805.8,
+ "n_train_examples": 800,
+ "n_val_examples": 100
+}

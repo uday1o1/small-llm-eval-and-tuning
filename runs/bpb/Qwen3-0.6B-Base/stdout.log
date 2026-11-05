@@ -1,0 +1,4 @@
+[run] runs/bpb/Qwen3-0.6B-Base
+[run] eval_bpb | Qwen/Qwen3-0.6B-Base | device cuda (precision=bfloat16, compile=yes)
+Loading weights:   0%|          | 0/310 [00:00<?, ?it/s]Loading weights:  31%|███       | 96/310 [00:00<00:00, 957.60it/s]Loading weights:  83%|████████▎ | 256/310 [00:00<00:00, 1306.52it/s]Loading weights: 100%|██████████| 310/310 [00:00<00:00, 1322.96it/s]
+[eval_bpb] Qwen/Qwen3-0.6B-Base: val_bpb 0.9528 on 200 docs (4.57 bytes/token)

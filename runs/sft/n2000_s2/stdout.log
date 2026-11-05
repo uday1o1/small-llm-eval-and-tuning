@@ -1,0 +1,37 @@
+[run] runs/sft/n2000_s2
+[run] sft | HuggingFaceTB/SmolLM2-360M | device cuda (precision=bfloat16, compile=yes)
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  77%|███████▋  | 223/290 [00:00<00:00, 2218.53it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 2214.79it/s]
+[model] 371M params, 8.68M trainable (2.34% LoRA)
+[data] 2000 train / 100 val examples (alpaca, max_len 384)
+[eval] before: {'val_response_nll': 1.556, 'val_response_ppl': 4.74}
+step    10 | loss 1.5358 | 12s | mem 1.9 GB
+step    20 | loss 1.4549 | 25s | mem 1.9 GB
+step    30 | loss 1.3557 | 38s | mem 1.9 GB
+step    40 | loss 1.4093 | 51s | mem 1.9 GB
+step    50 | loss 1.2951 | 63s | mem 1.9 GB
+  eval: {'val_response_nll': 1.3497, 'val_response_ppl': 3.8563}
+step    60 | loss 1.3471 | 75s | mem 1.9 GB
+step    70 | loss 1.2988 | 88s | mem 1.9 GB
+step    80 | loss 1.3766 | 100s | mem 1.9 GB
+step    90 | loss 1.2952 | 113s | mem 1.9 GB
+step   100 | loss 1.3310 | 126s | mem 1.9 GB
+  eval: {'val_response_nll': 1.3302, 'val_response_ppl': 3.7819}
+step   110 | loss 1.2785 | 139s | mem 1.9 GB
+step   120 | loss 1.3195 | 152s | mem 1.9 GB
+step   130 | loss 1.2473 | 164s | mem 1.9 GB
+step   140 | loss 1.3125 | 176s | mem 1.9 GB
+step   150 | loss 1.1966 | 190s | mem 1.9 GB
+  eval: {'val_response_nll': 1.3251, 'val_response_ppl': 3.7626}
+step   160 | loss 1.1987 | 202s | mem 1.9 GB
+step   170 | loss 1.3091 | 215s | mem 1.9 GB
+step   180 | loss 1.3149 | 228s | mem 1.9 GB
+step   190 | loss 1.3092 | 242s | mem 1.9 GB
+step   200 | loss 1.2639 | 256s | mem 1.9 GB
+  eval: {'val_response_nll': 1.322, 'val_response_ppl': 3.751}
+step   210 | loss 1.3071 | 269s | mem 1.9 GB
+step   220 | loss 1.3052 | 283s | mem 1.9 GB
+step   230 | loss 1.2541 | 297s | mem 1.9 GB
+step   240 | loss 1.3111 | 310s | mem 1.9 GB
+step   250 | loss 1.2729 | 324s | mem 1.9 GB
+[eval] after: {'val_response_nll': 1.3208, 'val_response_ppl': 3.7463}
+[done] runs/sft/n2000_s2  (compare samples_before.txt vs samples_after.txt)

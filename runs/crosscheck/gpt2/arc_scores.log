@@ -1,0 +1,2 @@
+Loading weights:   0%|          | 0/148 [00:00<?, ?it/s]Loading weights: 100%|██████████| 148/148 [00:00<00:00, 6580.77it/s]
+{"model": "gpt2", "n_questions": 2376, "first300_mc_accuracy": {"acc": 0.42, "acc_norm": 0.38, "n": 300}, "full": {"acc": 0.43813131313131315, "acc_norm_chars": 0.3947811447811448, "acc_norm_tokens": 0.38173400673400676}, "first300_acc_norm_tokens": 0.39666666666666667}

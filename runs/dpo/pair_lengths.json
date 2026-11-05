@@ -1,0 +1,23 @@
+{
+ "train": {
+  "n_pairs": 800,
+  "chosen_longer": 0.53875,
+  "rejected_longer": 0.4475,
+  "mean_tokens_chosen": 137.93625,
+  "mean_tokens_rejected": 110.0675
+ },
+ "heldout": {
+  "n_pairs": 240,
+  "chosen_longer": 0.5833333333333334,
+  "rejected_longer": 0.3958333333333333,
+  "mean_tokens_chosen": 138.075,
+  "mean_tokens_rejected": 103.575
+ },
+ "heldout_first100": {
+  "n_pairs": 100,
+  "chosen_longer": 0.58,
+  "rejected_longer": 0.4,
+  "mean_tokens_chosen": 125.92,
+  "mean_tokens_rejected": 105.92
+ }
+}

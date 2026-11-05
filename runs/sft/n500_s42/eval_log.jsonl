@@ -1,0 +1,5 @@
+{"step": 50, "val_response_nll": 1.349615600984674, "val_response_ppl": 3.8559430250763866}
+{"step": 100, "val_response_nll": 1.339487911194104, "val_response_ppl": 3.8170883165958758}
+{"step": 150, "val_response_nll": 1.3511389158732192, "val_response_ppl": 3.8618213166036597}
+{"step": 200, "val_response_nll": 1.3682470616257418, "val_response_ppl": 3.928458310947785}
+{"step": 250, "val_response_nll": 1.371995440477308, "val_response_ppl": 3.943211293610203}

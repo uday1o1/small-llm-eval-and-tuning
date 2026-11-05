@@ -1,0 +1,37 @@
+[run] runs/sft/n8000_s1337
+[run] sft | HuggingFaceTB/SmolLM2-360M | device cuda (precision=bfloat16, compile=yes)
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  76%|███████▌  | 220/290 [00:00<00:00, 2196.48it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 2232.36it/s]
+[model] 371M params, 8.68M trainable (2.34% LoRA)
+[data] 8000 train / 100 val examples (alpaca, max_len 384)
+[eval] before: {'val_response_nll': 1.556, 'val_response_ppl': 4.74}
+step    10 | loss 1.5485 | 15s | mem 1.9 GB
+step    20 | loss 1.4343 | 31s | mem 1.9 GB
+step    30 | loss 1.4034 | 45s | mem 1.9 GB
+step    40 | loss 1.3456 | 60s | mem 1.9 GB
+step    50 | loss 1.3706 | 76s | mem 1.9 GB
+  eval: {'val_response_nll': 1.3507, 'val_response_ppl': 3.8603}
+step    60 | loss 1.3498 | 91s | mem 1.9 GB
+step    70 | loss 1.2930 | 107s | mem 1.9 GB
+step    80 | loss 1.3498 | 122s | mem 1.9 GB
+step    90 | loss 1.2868 | 139s | mem 1.9 GB
+step   100 | loss 1.3326 | 154s | mem 1.9 GB
+  eval: {'val_response_nll': 1.3329, 'val_response_ppl': 3.792}
+step   110 | loss 1.3340 | 170s | mem 1.9 GB
+step   120 | loss 1.3202 | 186s | mem 1.9 GB
+step   130 | loss 1.2788 | 200s | mem 1.9 GB
+step   140 | loss 1.3213 | 214s | mem 1.9 GB
+step   150 | loss 1.2670 | 227s | mem 1.9 GB
+  eval: {'val_response_nll': 1.3241, 'val_response_ppl': 3.7588}
+step   160 | loss 1.2860 | 240s | mem 1.9 GB
+step   170 | loss 1.3115 | 253s | mem 1.9 GB
+step   180 | loss 1.3583 | 266s | mem 1.9 GB
+step   190 | loss 1.2751 | 278s | mem 1.9 GB
+step   200 | loss 1.3012 | 291s | mem 1.9 GB
+  eval: {'val_response_nll': 1.3215, 'val_response_ppl': 3.7491}
+step   210 | loss 1.3483 | 304s | mem 1.9 GB
+step   220 | loss 1.3386 | 317s | mem 1.9 GB
+step   230 | loss 1.3429 | 330s | mem 1.9 GB
+step   240 | loss 1.2938 | 343s | mem 1.9 GB
+step   250 | loss 1.3553 | 356s | mem 1.9 GB
+[eval] after: {'val_response_nll': 1.3213, 'val_response_ppl': 3.7482}
+[done] runs/sft/n8000_s1337  (compare samples_before.txt vs samples_after.txt)

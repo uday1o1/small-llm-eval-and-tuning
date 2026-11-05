@@ -1,0 +1,17 @@
+{
+ "name": "bpb_SmolLM2-135M",
+ "seed": 1337,
+ "method": "eval_bpb",
+ "model": "HuggingFaceTB/SmolLM2-135M",
+ "params": 134515008,
+ "trainable_params": 134515008,
+ "device": "cuda (precision=bfloat16, compile=yes)",
+ "dtype": "float32",
+ "val_bpb": 1.0097638515366698,
+ "val_loss_per_token": 3.1098133234797634,
+ "eval_docs": 200,
+ "eval_bytes": 570218,
+ "eval_tokens": 128337,
+ "bytes_per_token": 4.443130196280106,
+ "eval_time_sec": 6.7
+}

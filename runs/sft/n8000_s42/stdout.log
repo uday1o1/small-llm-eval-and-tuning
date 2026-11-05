@@ -1,0 +1,37 @@
+[run] runs/sft/n8000_s42
+[run] sft | HuggingFaceTB/SmolLM2-360M | device cuda (precision=bfloat16, compile=yes)
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  48%|████▊     | 140/290 [00:00<00:00, 1358.93it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1433.30it/s]
+[model] 371M params, 8.68M trainable (2.34% LoRA)
+[data] 8000 train / 100 val examples (alpaca, max_len 384)
+[eval] before: {'val_response_nll': 1.556, 'val_response_ppl': 4.74}
+step    10 | loss 1.5717 | 12s | mem 1.9 GB
+step    20 | loss 1.3789 | 25s | mem 1.9 GB
+step    30 | loss 1.4340 | 38s | mem 1.9 GB
+step    40 | loss 1.3094 | 51s | mem 1.9 GB
+step    50 | loss 1.3571 | 63s | mem 1.9 GB
+  eval: {'val_response_nll': 1.3513, 'val_response_ppl': 3.8625}
+step    60 | loss 1.2718 | 75s | mem 1.9 GB
+step    70 | loss 1.3289 | 88s | mem 1.9 GB
+step    80 | loss 1.3471 | 101s | mem 1.9 GB
+step    90 | loss 1.3238 | 113s | mem 1.9 GB
+step   100 | loss 1.2587 | 126s | mem 1.9 GB
+  eval: {'val_response_nll': 1.3336, 'val_response_ppl': 3.7946}
+step   110 | loss 1.3621 | 139s | mem 1.9 GB
+step   120 | loss 1.3247 | 152s | mem 1.9 GB
+step   130 | loss 1.2824 | 165s | mem 1.9 GB
+step   140 | loss 1.2764 | 178s | mem 1.9 GB
+step   150 | loss 1.3046 | 191s | mem 1.9 GB
+  eval: {'val_response_nll': 1.3245, 'val_response_ppl': 3.7602}
+step   160 | loss 1.2366 | 205s | mem 1.9 GB
+step   170 | loss 1.2811 | 218s | mem 1.9 GB
+step   180 | loss 1.2087 | 231s | mem 1.9 GB
+step   190 | loss 1.2964 | 243s | mem 1.9 GB
+step   200 | loss 1.3255 | 256s | mem 1.9 GB
+  eval: {'val_response_nll': 1.3215, 'val_response_ppl': 3.749}
+step   210 | loss 1.2585 | 269s | mem 1.9 GB
+step   220 | loss 1.3221 | 282s | mem 1.9 GB
+step   230 | loss 1.2859 | 294s | mem 1.9 GB
+step   240 | loss 1.3489 | 307s | mem 1.9 GB
+step   250 | loss 1.3608 | 319s | mem 1.9 GB
+[eval] after: {'val_response_nll': 1.3211, 'val_response_ppl': 3.7474}
+[done] runs/sft/n8000_s42  (compare samples_before.txt vs samples_after.txt)

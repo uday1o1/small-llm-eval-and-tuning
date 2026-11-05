@@ -1,0 +1,55 @@
+name: dpo_beta0.5
+seed: 1
+device: auto
+precision: auto
+out_dir: outputs/nanolm
+run_dir: runs/dpo/beta0.5_s1
+tags: []
+model:
+  name: Qwen/Qwen2.5-0.5B-Instruct
+  dtype: fp32
+  lora: true
+  lora_r: 16
+  lora_alpha: 32
+  lora_dropout: 0.05
+  lora_targets:
+  - q_proj
+  - k_proj
+  - v_proj
+  - o_proj
+  - gate_proj
+  - up_proj
+  - down_proj
+  grad_checkpointing: true
+data:
+  format: ultrafeedback
+  dataset: trl-lib/ultrafeedback_binarized
+  split: train
+  val_split: test
+  n_train: 800
+  n_val: 100
+  max_len: 512
+  min_score_gap: 2.0
+  shard_dir: data/golf/fineweb10B_sp1024
+  shard_tokenizer: sp:data/golf/tokenizers/fineweb_1024_bpe.model
+  eval_docs: 200
+train:
+  method: dpo
+  steps: 100
+  batch_size: 2
+  grad_accum: 4
+  lr: 5.0e-05
+  weight_decay: 0.0
+  warmup_steps: 10
+  dpo_beta: 0.5
+  log_every: 10
+  eval_every: 25
+  max_time_sec: 0.0
+  ctx_len: 1024
+eval_prompts:
+- Give three tips for staying healthy.
+- Explain what a language model is to a 10-year-old.
+- Write a haiku about autumn.
+- What is the capital of France, and why is it famous?
+- Translate 'good morning' into Spanish and Chinese.
+gen_tokens: 128

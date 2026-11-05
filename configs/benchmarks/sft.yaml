@@ -1,0 +1,31 @@
+# The tasks of models.yaml for every SFT adapter (base model SmolLM2-360M): did instruction tuning change the scores?
+#   python scripts/bench.py run -c configs/benchmarks/sft.yaml --slots 4
+name: sft
+out_dir: runs/benchmarks
+batch_size: 8
+device: auto
+models:
+  - {name: n500_s1337, hf: HuggingFaceTB/SmolLM2-360M, peft: runs/sft/n500_s1337/adapter, dtype: float32}
+  - {name: n500_s42, hf: HuggingFaceTB/SmolLM2-360M, peft: runs/sft/n500_s42/adapter, dtype: float32}
+  - {name: n500_s1, hf: HuggingFaceTB/SmolLM2-360M, peft: runs/sft/n500_s1/adapter, dtype: float32}
+  - {name: n500_s2, hf: HuggingFaceTB/SmolLM2-360M, peft: runs/sft/n500_s2/adapter, dtype: float32}
+  - {name: n500_s3, hf: HuggingFaceTB/SmolLM2-360M, peft: runs/sft/n500_s3/adapter, dtype: float32}
+  - {name: n2000_s1337, hf: HuggingFaceTB/SmolLM2-360M, peft: runs/sft/n2000_s1337/adapter, dtype: float32}
+  - {name: n2000_s42, hf: HuggingFaceTB/SmolLM2-360M, peft: runs/sft/n2000_s42/adapter, dtype: float32}
+  - {name: n2000_s1, hf: HuggingFaceTB/SmolLM2-360M, peft: runs/sft/n2000_s1/adapter, dtype: float32}
+  - {name: n2000_s2, hf: HuggingFaceTB/SmolLM2-360M, peft: runs/sft/n2000_s2/adapter, dtype: float32}
+  - {name: n2000_s3, hf: HuggingFaceTB/SmolLM2-360M, peft: runs/sft/n2000_s3/adapter, dtype: float32}
+  - {name: n8000_s1337, hf: HuggingFaceTB/SmolLM2-360M, peft: runs/sft/n8000_s1337/adapter, dtype: float32}
+  - {name: n8000_s42, hf: HuggingFaceTB/SmolLM2-360M, peft: runs/sft/n8000_s42/adapter, dtype: float32}
+  - {name: n8000_s1, hf: HuggingFaceTB/SmolLM2-360M, peft: runs/sft/n8000_s1/adapter, dtype: float32}
+  - {name: n8000_s2, hf: HuggingFaceTB/SmolLM2-360M, peft: runs/sft/n8000_s2/adapter, dtype: float32}
+  - {name: n8000_s3, hf: HuggingFaceTB/SmolLM2-360M, peft: runs/sft/n8000_s3/adapter, dtype: float32}
+task_groups:
+  knowledge:
+    tasks: [arc_easy, arc_challenge, hellaswag, mmlu]
+    num_fewshot: 0
+    limit: 300            # the first 300 questions per task (per MMLU subject)
+  math:
+    tasks: [gsm8k]
+    num_fewshot: 5
+    limit: 100

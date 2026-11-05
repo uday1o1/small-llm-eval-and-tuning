@@ -1,0 +1,15 @@
+{
+ "run_dir": "runs/sft/n8000_s2",
+ "model": "HuggingFaceTB/SmolLM2-360M",
+ "adapter": true,
+ "n_val_examples": 100,
+ "fineweb_val_bpb": 0.9317826640904503,
+ "fineweb_val_loss_per_token": 2.8696512941775882,
+ "fineweb_eval_docs": 200,
+ "fineweb_eval_bytes": 570218,
+ "fineweb_eval_tokens": 128337,
+ "fineweb_bytes_per_token": 4.443130196280106,
+ "gen_n": 50,
+ "gen_mean_tokens": 106.88,
+ "gen_ended_frac": 0.84
+}

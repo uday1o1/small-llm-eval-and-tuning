@@ -1,0 +1,17 @@
+# MMLU in the cloze form: each choice's answer text is scored after the question, instead of the
+# letters A-D after a listing of the choices (lm_eval's `mmlu`). Every question, base models only.
+#   python scripts/bench.py run -c configs/benchmarks/cloze.yaml --slots 4
+name: cloze
+out_dir: runs/benchmarks
+batch_size: 8
+device: auto
+models:
+  - {name: gpt2-124M,             hf: gpt2,                                 dtype: float32}
+  - {name: SmolLM2-135M,          hf: HuggingFaceTB/SmolLM2-135M,           dtype: float32}
+  - {name: SmolLM2-360M,          hf: HuggingFaceTB/SmolLM2-360M,           dtype: float32}
+  - {name: Qwen2.5-0.5B,          hf: Qwen/Qwen2.5-0.5B,                    dtype: float32}
+  - {name: Qwen3-0.6B-Base,       hf: Qwen/Qwen3-0.6B-Base,                 dtype: float32}
+task_groups:
+  mmlu_cloze:
+    tasks: [mmlu_continuation]
+    num_fewshot: 0

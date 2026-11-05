@@ -1,0 +1,6 @@
+external/
+data/
+__pycache__/
+*.pt
+*.safetensors
+.DS_Store

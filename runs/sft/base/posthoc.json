@@ -1,0 +1,15 @@
+{
+ "run_dir": "runs/sft/base",
+ "model": "HuggingFaceTB/SmolLM2-360M",
+ "adapter": false,
+ "n_val_examples": 100,
+ "fineweb_val_bpb": 0.9278826867673079,
+ "fineweb_val_loss_per_token": 2.857640365659677,
+ "fineweb_eval_docs": 200,
+ "fineweb_eval_bytes": 570218,
+ "fineweb_eval_tokens": 128337,
+ "fineweb_bytes_per_token": 4.443130196280106,
+ "gen_n": 50,
+ "gen_mean_tokens": 252.72,
+ "gen_ended_frac": 0.04
+}

@@ -1,0 +1,15 @@
+{
+ "model": "HuggingFaceTB/SmolLM2-360M",
+ "n_questions": 2376,
+ "first300_mc_accuracy": {
+  "acc": 0.6833333333333333,
+  "acc_norm": 0.6633333333333333,
+  "n": 300
+ },
+ "full": {
+  "acc": 0.7037037037037037,
+  "acc_norm_chars": 0.6801346801346801,
+  "acc_norm_tokens": 0.6658249158249159
+ },
+ "first300_acc_norm_tokens": 0.6233333333333333
+}

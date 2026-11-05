@@ -1,0 +1,2 @@
+Loading weights:   0%|          | 0/310 [00:00<?, ?it/s]Loading weights:  42%|████▏     | 130/310 [00:00<00:00, 1288.82it/s]Loading weights:  86%|████████▌ | 267/310 [00:00<00:00, 1320.64it/s]Loading weights: 100%|██████████| 310/310 [00:00<00:00, 1350.86it/s]
+[crosscheck] Qwen/Qwen3-0.6B-Base (fp32) ARC-Easy test (n=300): acc 0.6100  acc_norm 0.5433  (33s, our 60-line scorer)

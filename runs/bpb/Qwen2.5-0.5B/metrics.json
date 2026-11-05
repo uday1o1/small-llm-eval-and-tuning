@@ -1,0 +1,17 @@
+{
+ "name": "bpb_Qwen2.5-0.5B",
+ "seed": 1337,
+ "method": "eval_bpb",
+ "model": "Qwen/Qwen2.5-0.5B",
+ "params": 494032768,
+ "trainable_params": 494032768,
+ "device": "cuda (precision=bfloat16, compile=yes)",
+ "dtype": "float32",
+ "val_bpb": 0.9510830751094472,
+ "val_loss_per_token": 3.0095016257954623,
+ "eval_docs": 200,
+ "eval_bytes": 570218,
+ "eval_tokens": 124908,
+ "bytes_per_token": 4.565103916482531,
+ "eval_time_sec": 8.8
+}

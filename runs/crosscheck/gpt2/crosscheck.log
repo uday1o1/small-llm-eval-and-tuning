@@ -1,0 +1,2 @@
+Loading weights:   0%|          | 0/148 [00:00<?, ?it/s]Loading weights: 100%|██████████| 148/148 [00:00<00:00, 6528.03it/s]
+[crosscheck] gpt2 (fp32) ARC-Easy test (n=300): acc 0.4200  acc_norm 0.3800  (8s, our 60-line scorer)

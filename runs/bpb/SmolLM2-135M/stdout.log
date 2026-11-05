@@ -1,0 +1,5 @@
+[run] runs/bpb/SmolLM2-135M
+[run] eval_bpb | HuggingFaceTB/SmolLM2-135M | device cuda (precision=bfloat16, compile=yes)
+Loading weights:   0%|          | 0/272 [00:00<?, ?it/s]Loading weights: 100%|██████████| 272/272 [00:00<00:00, 3079.63it/s]
+[transformers] Token indices sequence length is longer than the specified maximum sequence length for this model (9913 > 8192). Running this sequence through the model will result in indexing errors
+[eval_bpb] HuggingFaceTB/SmolLM2-135M: val_bpb 1.0098 on 200 docs (4.44 bytes/token)

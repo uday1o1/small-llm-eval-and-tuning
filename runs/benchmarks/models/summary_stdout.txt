@@ -1,0 +1,11 @@
+task                  arc_challenge          arc_easy                                 gsm8k                          hellaswag            mmlu
+metric                          acc acc_norm      acc acc_norm exact_match_flexible-extract exact_match_strict-match       acc acc_norm    acc
+model                                                                                                                                         
+Qwen2.5-0.5B                  0.273    0.327    0.597    0.570                         0.34                     0.33     0.393    0.497  0.495
+Qwen2.5-0.5B-Instruct         0.303    0.353    0.580    0.583                         0.34                     0.22     0.413    0.490  0.475
+Qwen3-0.6B-Base               0.310    0.370    0.610    0.543                         0.52                     0.52     0.440    0.530  0.526
+Qwen3.5-0.8B-Base             0.367    0.403    0.677    0.660                         0.40                     0.39     0.440    0.533  0.551
+SmolLM2-135M                  0.227    0.277    0.583    0.553                         0.02                     0.01     0.403    0.437  0.243
+SmolLM2-360M                  0.320    0.363    0.683    0.663                         0.05                     0.04     0.460    0.553  0.262
+SmolLM2-360M-Instruct         0.290    0.343    0.530    0.493                         0.02                     0.02     0.453    0.543  0.242
+gpt2-124M                     0.213    0.223    0.420    0.380                         0.01                     0.01     0.353    0.427  0.228

@@ -1,0 +1,55 @@
+name: sft_n8000
+seed: 3
+device: auto
+precision: auto
+out_dir: outputs/nanolm
+run_dir: runs/sft/n8000_s3
+tags: []
+model:
+  name: HuggingFaceTB/SmolLM2-360M
+  dtype: fp32
+  lora: true
+  lora_r: 16
+  lora_alpha: 32
+  lora_dropout: 0.05
+  lora_targets:
+  - q_proj
+  - k_proj
+  - v_proj
+  - o_proj
+  - gate_proj
+  - up_proj
+  - down_proj
+  grad_checkpointing: true
+data:
+  format: alpaca
+  dataset: yahma/alpaca-cleaned
+  split: train
+  val_split: ''
+  n_train: 8000
+  n_val: 100
+  max_len: 384
+  min_score_gap: 1.0
+  shard_dir: data/golf/fineweb10B_sp1024
+  shard_tokenizer: sp:data/golf/tokenizers/fineweb_1024_bpe.model
+  eval_docs: 200
+train:
+  method: sft
+  steps: 250
+  batch_size: 4
+  grad_accum: 4
+  lr: 0.0002
+  weight_decay: 0.0
+  warmup_steps: 20
+  dpo_beta: 0.1
+  log_every: 10
+  eval_every: 50
+  max_time_sec: 0.0
+  ctx_len: 1024
+eval_prompts:
+- Give three tips for staying healthy.
+- Explain what a language model is to a 10-year-old.
+- Write a haiku about autumn.
+- What is the capital of France, and why is it famous?
+- Translate 'good morning' into Spanish and Chinese.
+gen_tokens: 128

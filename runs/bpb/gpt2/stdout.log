@@ -1,0 +1,5 @@
+[run] runs/bpb/gpt2
+[run] eval_bpb | gpt2 | device cuda (precision=bfloat16, compile=yes)
+Loading weights:   0%|          | 0/148 [00:00<?, ?it/s]Loading weights: 100%|██████████| 148/148 [00:00<00:00, 4189.69it/s]
+[transformers] Token indices sequence length is longer than the specified maximum sequence length for this model (1291 > 1024). Running this sequence through the model will result in indexing errors
+[eval_bpb] gpt2: val_bpb 1.0751 on 200 docs (4.56 bytes/token)

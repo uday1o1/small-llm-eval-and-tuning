@@ -1,0 +1,23 @@
+[run] runs/dpo/beta0.1_s1337
+[run] dpo | Qwen/Qwen2.5-0.5B-Instruct | device cuda (precision=bfloat16, compile=yes)
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:  49%|████▉     | 143/290 [00:00<00:00, 1424.95it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 1493.05it/s]
+[model] 503M params, 8.80M trainable (1.75% LoRA)
+Generating train split:   0%|          | 0/62135 [00:00<?, ? examples/s]Generating train split:  14%|█▍        | 9000/62135 [00:00<00:00, 82921.97 examples/s]Generating train split:  35%|███▌      | 22000/62135 [00:00<00:00, 98979.91 examples/s]Generating train split:  53%|█████▎    | 33000/62135 [00:00<00:00, 98115.85 examples/s]Generating train split:  71%|███████   | 44000/62135 [00:00<00:00, 101947.94 examples/s]Generating train split:  89%|████████▊ | 55000/62135 [00:00<00:00, 101536.55 examples/s]Generating train split: 100%|██████████| 62135/62135 [00:00<00:00, 102512.97 examples/s]
+Generating test split:   0%|          | 0/1000 [00:00<?, ? examples/s]Generating test split: 100%|██████████| 1000/1000 [00:00<00:00, 96904.19 examples/s]
+[data] 800 train / 100 val examples (ultrafeedback, max_len 512)
+[eval] before: {'val_reward_acc': 0.5, 'val_reward_margin': -0.0, 'val_policy_prefers_chosen': 0.61}
+step    10 | loss 0.6896 | reward_acc 0.5750 | margin 0.0105 | 24s | mem 2.7 GB
+step    20 | loss 0.6092 | reward_acc 0.7375 | margin 0.2292 | 47s | mem 2.7 GB
+  eval: {'val_reward_acc': 0.6, 'val_reward_margin': 0.4955, 'val_policy_prefers_chosen': 0.61}
+step    30 | loss 0.5435 | reward_acc 0.7875 | margin 0.7057 | 60s | mem 2.7 GB
+step    40 | loss 0.5825 | reward_acc 0.6875 | margin 0.6325 | 86s | mem 2.7 GB
+step    50 | loss 0.5280 | reward_acc 0.7625 | margin 0.8123 | 109s | mem 2.7 GB
+  eval: {'val_reward_acc': 0.68, 'val_reward_margin': 0.5175, 'val_policy_prefers_chosen': 0.61}
+step    60 | loss 0.5352 | reward_acc 0.6750 | margin 0.6494 | 133s | mem 2.7 GB
+step    70 | loss 0.5554 | reward_acc 0.8000 | margin 0.7483 | 157s | mem 2.7 GB
+  eval: {'val_reward_acc': 0.69, 'val_reward_margin': 0.6298, 'val_policy_prefers_chosen': 0.63}
+step    80 | loss 0.4519 | reward_acc 0.7875 | margin 1.0427 | 170s | mem 2.7 GB
+step    90 | loss 0.5211 | reward_acc 0.7000 | margin 0.8602 | 194s | mem 2.7 GB
+step   100 | loss 0.4881 | reward_acc 0.7625 | margin 0.9070 | 219s | mem 2.7 GB
+[eval] after: {'val_reward_acc': 0.68, 'val_reward_margin': 0.6409, 'val_policy_prefers_chosen': 0.63}
+[done] runs/dpo/beta0.1_s1337  (compare samples_before.txt vs samples_after.txt)

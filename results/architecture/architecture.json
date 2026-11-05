@@ -1,0 +1,111 @@
+{
+ "Qwen/Qwen3.5-2B": {
+  "sha": "15852e8c16360a2fea060d615a32b45270f8a8fc",
+  "model_class": "Qwen3_5ForCausalLM",
+  "params_meta": {
+   "embedding": 508559360,
+   "lm_head": 0,
+   "full_attention": 88083456,
+   "linear_attention": 379112256,
+   "mlp": 905969664,
+   "norm": 100352
+  },
+  "params_safetensors": {
+   "embedding": 508559360,
+   "lm_head": 0,
+   "full_attention": 88083456,
+   "linear_attention": 379112256,
+   "mlp": 905969664,
+   "norm": 100352
+  },
+  "params_total_meta": 1881825088,
+  "config": {
+   "n_layers": 24,
+   "n_full_attention": 6,
+   "n_linear_attention": 18,
+   "hidden": 2048,
+   "q_heads": 8,
+   "kv_heads": 2,
+   "head_dim": 256,
+   "vocab": 248320,
+   "tied_embeddings": true,
+   "max_position_embeddings": 262144,
+   "kv_bytes_per_token_bf16": 12288,
+   "attention_flops_per_token_per_context_token": 49152,
+   "recurrent_state_elems_per_layer": 262144,
+   "conv_state_elems_per_layer": 18432,
+   "n_linear_layers": 18
+  },
+  "measured": [
+   {
+    "T": 1024,
+    "state_bytes": 32342016
+   },
+   {
+    "T": 4096,
+    "state_bytes": 70090752
+   },
+   {
+    "T": 16384,
+    "state_bytes": 221085696
+   },
+   {
+    "T": 32768,
+    "state_bytes": 422412288
+   }
+  ]
+ },
+ "Qwen/Qwen3-1.7B": {
+  "sha": "70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+  "model_class": "Qwen3ForCausalLM",
+  "params_meta": {
+   "embedding": 311164928,
+   "lm_head": 0,
+   "full_attention": 352328704,
+   "linear_attention": 0,
+   "mlp": 1056964608,
+   "norm": 116736
+  },
+  "params_safetensors": {
+   "embedding": 311164928,
+   "lm_head": 0,
+   "full_attention": 352328704,
+   "linear_attention": 0,
+   "mlp": 1056964608,
+   "norm": 116736
+  },
+  "params_total_meta": 1720574976,
+  "config": {
+   "n_layers": 28,
+   "n_full_attention": 28,
+   "n_linear_attention": 0,
+   "hidden": 2048,
+   "q_heads": 16,
+   "kv_heads": 8,
+   "head_dim": 128,
+   "vocab": 151936,
+   "tied_embeddings": true,
+   "max_position_embeddings": 40960,
+   "kv_bytes_per_token_bf16": 114688,
+   "attention_flops_per_token_per_context_token": 229376
+  },
+  "measured": [
+   {
+    "T": 1024,
+    "state_bytes": 117440512
+   },
+   {
+    "T": 4096,
+    "state_bytes": 469762048
+   },
+   {
+    "T": 16384,
+    "state_bytes": 1879048192
+   },
+   {
+    "T": 32768,
+    "state_bytes": 3758096384
+   }
+  ]
+ }
+}
