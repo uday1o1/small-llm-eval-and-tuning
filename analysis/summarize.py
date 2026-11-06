@@ -16,7 +16,7 @@ from scipy.stats import ttest_1samp, ttest_rel
 from common import (DPO_BETAS, SEEDS, SFT_SIZES, BASE_MODELS, CROSSCHECK_DIR, GSM8K_FILTER, HF_ID, ROOT, RUNS, TASKS, items, mcnemar, save,
                     task_scores, vs_chance)
 
-# values quoted from nanolm's tutorial (section 3.5) and laptop quickstart (step 6), for comparison only
+# values quoted from nanolm's tutorial (section 3.5) and LAPTOP_QUICKSTART.md (step 6), for comparison only
 TUTORIAL_BPB = {"gpt2-124M": 1.079, "SmolLM2-135M": 1.010, "SmolLM2-360M": 0.928, "Qwen2.5-0.5B": 0.951,
                 "Qwen3-0.6B-Base": 0.953, "Qwen3.5-0.8B-Base": 0.988}
 QUICKSTART_BPB = {"gpt2-124M": 1.0750, "Qwen2.5-0.5B": 0.9511}
@@ -34,7 +34,7 @@ def bpb():
                                     "eval_time_sec", "device", "dtype")}
         out[m]["tutorial"] = TUTORIAL_BPB[m]
         if m in QUICKSTART_BPB:
-            out[m]["quickstart_mac"] = QUICKSTART_BPB[m]
+            out[m]["quickstart"] = QUICKSTART_BPB[m]
     return out
 
 
@@ -91,7 +91,7 @@ def laptop_reproduction():
     for m, ref in QUICKSTART_LAPTOP.items():
         ours = aggregate("laptop", m)
         logged = aggregate("models", m)
-        out[m] = {t: {"quickstart_mac": ref[t], "ours": ours[t], "ours_logged_run": logged[t]} for t in ref}
+        out[m] = {t: {"quickstart": ref[t], "ours": ours[t], "ours_logged_run": logged[t]} for t in ref}
     return out
 
 

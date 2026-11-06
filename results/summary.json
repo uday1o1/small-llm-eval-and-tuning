@@ -11,7 +11,7 @@
    "device": "cuda (precision=bfloat16, compile=yes)",
    "dtype": "float32",
    "tutorial": 1.079,
-   "quickstart_mac": 1.075
+   "quickstart": 1.075
   },
   "SmolLM2-135M": {
    "val_bpb": 1.0097638515366698,
@@ -48,7 +48,7 @@
    "device": "cuda (precision=bfloat16, compile=yes)",
    "dtype": "float32",
    "tutorial": 0.951,
-   "quickstart_mac": 0.9511
+   "quickstart": 0.9511
   },
   "Qwen3-0.6B-Base": {
    "val_bpb": 0.9527811731653232,
@@ -2482,81 +2482,81 @@
  "laptop_reproduction": {
   "SmolLM2-135M": {
    "arc_challenge": {
-    "quickstart_mac": 0.277,
+    "quickstart": 0.277,
     "ours": 0.27666666666666667,
     "ours_logged_run": 0.27666666666666667
    },
    "arc_easy": {
-    "quickstart_mac": 0.553,
+    "quickstart": 0.553,
     "ours": 0.5533333333333333,
     "ours_logged_run": 0.5533333333333333
    },
    "hellaswag": {
-    "quickstart_mac": 0.437,
+    "quickstart": 0.437,
     "ours": 0.43666666666666665,
     "ours_logged_run": 0.43666666666666665
    },
    "mmlu": {
-    "quickstart_mac": 0.243,
+    "quickstart": 0.243,
     "ours": 0.24284928492849284,
     "ours_logged_run": 0.24284928492849284
    },
    "gsm8k": {
-    "quickstart_mac": 0.02,
+    "quickstart": 0.02,
     "ours": 0.02,
     "ours_logged_run": 0.02
    }
   },
   "SmolLM2-360M": {
    "arc_challenge": {
-    "quickstart_mac": 0.363,
+    "quickstart": 0.363,
     "ours": 0.36333333333333334,
     "ours_logged_run": 0.36333333333333334
    },
    "arc_easy": {
-    "quickstart_mac": 0.663,
+    "quickstart": 0.663,
     "ours": 0.6633333333333333,
     "ours_logged_run": 0.6633333333333333
    },
    "hellaswag": {
-    "quickstart_mac": 0.553,
+    "quickstart": 0.553,
     "ours": 0.5533333333333333,
     "ours_logged_run": 0.5533333333333333
    },
    "mmlu": {
-    "quickstart_mac": 0.262,
+    "quickstart": 0.262,
     "ours": 0.2623762376237624,
     "ours_logged_run": 0.2623762376237624
    },
    "gsm8k": {
-    "quickstart_mac": 0.05,
+    "quickstart": 0.05,
     "ours": 0.05,
     "ours_logged_run": 0.05
    }
   },
   "Qwen2.5-0.5B": {
    "arc_challenge": {
-    "quickstart_mac": 0.327,
+    "quickstart": 0.327,
     "ours": 0.32666666666666666,
     "ours_logged_run": 0.32666666666666666
    },
    "arc_easy": {
-    "quickstart_mac": 0.57,
+    "quickstart": 0.57,
     "ours": 0.57,
     "ours_logged_run": 0.57
    },
    "hellaswag": {
-    "quickstart_mac": 0.497,
+    "quickstart": 0.497,
     "ours": 0.49666666666666665,
     "ours_logged_run": 0.49666666666666665
    },
    "mmlu": {
-    "quickstart_mac": 0.495,
+    "quickstart": 0.495,
     "ours": 0.49523285661899524,
     "ours_logged_run": 0.49523285661899524
    },
    "gsm8k": {
-    "quickstart_mac": 0.34,
+    "quickstart": 0.34,
     "ours": 0.34,
     "ours_logged_run": 0.34
    }
