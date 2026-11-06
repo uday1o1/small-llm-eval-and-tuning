@@ -139,7 +139,7 @@ lm_eval's full per-question records (prompts, log-likelihoods, generated answers
 
 ## Reproducing
 
-Requires Python 3.11 and one NVIDIA GPU with 24 GB. All runs used one RTX 4090 machine (`results/environment.txt`), except the publisher-setting runs (`cards.yaml`), which ran later on rented RTX 4090 machines with the same packages (their lm_eval results files record three CPU and driver configurations, one of them the main machine's); PyTorch 2.8.0 with CUDA 12.8, and fp32 weights for every evaluation and tuning run (bf16 for the architecture cache measurement). nanolm enables TF32 matrix products for bpb, SFT and DPO; lm_eval does not. nanolm's run records label the device "precision=bfloat16", but its fine-tuning code never casts.
+Requires Python 3.11 and one NVIDIA GPU with 24 GB. All runs used one RTX 4090 machine (`results/environment.txt`), except the publisher-setting runs (`cards.yaml`), which ran on other RTX 4090 machines with the same packages (their lm_eval results files record three CPU and driver configurations, one of them the main machine's); PyTorch 2.8.0 with CUDA 12.8, and fp32 weights for every evaluation and tuning run (bf16 for the architecture cache measurement). nanolm enables TF32 matrix products for bpb, SFT and DPO; lm_eval does not. nanolm's run records label the device "precision=bfloat16", but its fine-tuning code never casts.
 
 ```bash
 bash scripts/setup.sh          # clone nanolm at commit 8418fc1 into external/, install requirements

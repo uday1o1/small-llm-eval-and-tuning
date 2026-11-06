@@ -76,7 +76,7 @@ analyze() {   # per-question tables, nanolm.analyze per study (paired p against 
   ls runs/sft/summary.csv runs/sft/summary.md runs/dpo/summary.csv runs/dpo/summary.md > /dev/null
   for c in laptop models full cloze cards sft dpo; do r=runs/benchmarks/$c
     [ -d $r ] && python scripts/bench.py summary $r > $r/summary_stdout.txt; done
-  { echo "# Environment of the runs (recorded on the machine that ran them; the publisher-setting runs of cards.yaml ran later on rented machines with the same GPU model and packages, whose records show three CPU and driver configurations, one of them this machine's; each lm_eval results file records its GPU, driver, CPU and packages)"
+  { echo "# Environment of the runs (recorded on the machine that ran them; the publisher-setting runs of cards.yaml ran on other machines with the same GPU model and packages, whose records show three CPU and driver configurations, one of them this machine's; each lm_eval results file records its GPU, driver, CPU and packages)"
     nvidia-smi --query-gpu=name,driver_version,memory.total --format=csv; echo
     lscpu | grep -E "^(CPU\(s\)|Model name)"; echo
     python -c "import sys, torch; print('python', sys.version.split()[0]); print('torch', torch.__version__, 'cuda', torch.version.cuda, 'cudnn', torch.backends.cudnn.version())"; echo
