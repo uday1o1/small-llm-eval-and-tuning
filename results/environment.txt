@@ -1,4 +1,4 @@
-# Environment of the runs (recorded on the machine that ran them; the publisher-setting runs of cards.yaml ran on other machines with the same GPU model and packages, whose records show three CPU and driver configurations, one of them this machine's; each lm_eval results file records its GPU, driver, CPU and packages)
+# Environment of the runs (recorded on the machine that ran them; the publisher-setting runs of cards.yaml ran on machines with the same GPU model and packages, whose records show three CPU and driver configurations, one of them this machine's; each lm_eval results file records its GPU, driver, CPU and packages)
 name, driver_version, memory.total [MiB]
 NVIDIA GeForce RTX 4090, 580.119.02, 24564 MiB
 
