@@ -1,4 +1,5 @@
-# nanolm's configs/part3/B2_laptop.yaml with out_dir set to runs/benchmarks (the other comments are nanolm's).
+# nanolm's configs/part3/B2_laptop.yaml with out_dir set to runs/benchmarks (the other comments are nanolm's, with the
+# usage path and the tutorial reference adapted).
 #   python -m nanolm.benchmarks run -c configs/benchmarks/laptop.yaml
 # `limit` caps the questions per task (per MMLU subject), so the numbers are noisier than nanolm's tutorial §3.6.4:
 # with n questions the standard error of an accuracy p is sqrt(p(1-p)/n) (~1.5 points at n=1000).

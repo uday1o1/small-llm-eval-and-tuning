@@ -43,7 +43,7 @@ On every question of each evaluation set (HellaSwag: the validation set), with M
 
 - **Reproduction.** The six bpb values are within 0.004 of nanolm's tutorial, and nanolm's `part3/B2_laptop.yaml`, with only its output directory changed, reproduces its quickstart table to every digit printed there.
 - **Below chance is systematic.** GPT-2 answers A to 99.4% of MMLU questions; A is the correct letter for 3,222 of the 14,042, and GPT-2 gets 3,219 right.
-- **The answer format reorders models.** In MMLU's letter format SmolLM2-360M trails Qwen2.5-0.5B by 0.215. In the cloze form it is ahead by 0.019 (McNemar p < 0.0001) and not resolved from Qwen3.5-0.8B-Base (−0.004, p = 0.34).
+- **The answer format reorders models.** In MMLU's letter format SmolLM2-360M trails Qwen2.5-0.5B by 0.215. In the cloze form it is ahead by 0.019 (McNemar p < 0.0001) and not resolved from Qwen3.5-0.8B-Base (0.004 ahead, p = 0.34).
 - **The first 300 questions are not always representative.** The first 300 HellaSwag validation questions all come from ActivityNet: GPT-2 scores 0.427 on them, 0.311 on all 10,042, and 0.275 on the 6,799 WikiHow ones.
 - **Publisher numbers.** SmolLM2's base-model cards (0-shot lighteval; GSM8K 5-shot) agree within 0.018 on ARC (the cards' average, against the mean of our ARC-Easy and ARC-Challenge), HellaSwag and GSM8K. The publishers' own settings, run on the same questions (`configs/benchmarks/cards.yaml`):
 
@@ -125,7 +125,7 @@ Parameter counts are of the language model (Qwen3.5-2B's vision encoder and mult
 | path | contents |
 |---|---|
 | `configs/finetune/` | `sft.yaml`, `dpo.yaml`: nanolm's `P2_sft_alpaca.yaml` and `P3_dpo.yaml` with fp32 weights and no wall-clock cap |
-| `configs/benchmarks/` | `laptop.yaml` (nanolm's `B2_laptop.yaml` verbatim, comments included, with only the output directory changed), `models.yaml` (all eight models), `full.yaml` (every question), `cloze.yaml` and `cloze_qwen3.5.yaml` (MMLU cloze form), `cards.yaml` (the publishers' settings), `sft.yaml` and `dpo.yaml` (every adapter) |
+| `configs/benchmarks/` | `laptop.yaml` (nanolm's `B2_laptop.yaml` with only the output directory changed in its settings), `models.yaml` (all eight models), `full.yaml` (every question), `cloze.yaml` and `cloze_qwen3.5.yaml` (MMLU cloze form), `cards.yaml` (the publishers' settings), `sft.yaml` and `dpo.yaml` (every adapter) |
 | `runs/bpb/`, `runs/crosscheck/` | FineWeb bpb records; crosscheck logs, the lm_eval run with its per-question records, and per-choice scores for all 2,376 ARC-Easy questions (`arc_easy_scores.csv`) |
 | `runs/benchmarks/<config>/<model>/` | lm_eval results per task group and `stdout.log`; except under `laptop/`, `items.csv.gz` (one row per question, and per answer filter for GSM8K: correct and chosen answer, scores); `summary.csv` per config |
 | `runs/sft/`, `runs/dpo/` | nanolm's record of every run (`config.yaml`, `meta.json`, `train_log.jsonl`, `eval_log.jsonl`, `metrics.json`, `samples_before.txt`, `samples_after.txt`, `stdout.log`), `posthoc.json` and `generations.jsonl`; `base/` for the untuned model; `summary.csv`/`summary.md` from `python -m nanolm.analyze` (it labels every metric "lower is better" and its printed noise floor "bpb", which for DPO's reward accuracy read the other way and in the metric's own units; it then stops at its curve plot, and `analyze_stdout.txt` holds that error ahead of the printed table); `runs/dpo/pair_lengths.json` |
@@ -149,7 +149,7 @@ python analysis/summarize.py   # results/summary.json (no GPU)
 python analysis/figures.py     # figures/*.png (no GPU)
 ```
 
-The committed records count as finished runs, so on a fresh clone `run_all.sh` only rebuilds the tables. To rerun everything, move them aside first: `mv runs runs.committed && mv results/architecture results/architecture.committed`.
+The committed records count as finished runs, so on a fresh clone `run_all.sh` skips every run: it only downloads the FineWeb data (`prepare`) and rebuilds the tables and `results/environment.txt` (`analyze`). To rerun everything, move them aside first: `mv runs runs.committed && mv results/architecture results/architecture.committed`.
 
 - `run_all.sh` stages: `prepare bpb crosscheck benchmarks sft dpo tuned_benchmarks posthoc architecture analyze` (any subset can be named). `SLOTS` (default 4) jobs of the bpb, crosscheck, sft, dpo and posthoc stages and `BSLOTS` (default 2) benchmark jobs share the GPU; a benchmark job that fails, for example out of memory, is retried alone.
 - Qwen3.5 runs on transformers' PyTorch implementation of Gated DeltaNet: flash-linear-attention and causal-conv1d are not installed.
