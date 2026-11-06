@@ -1,4 +1,5 @@
-"""Every summary number and paired test, computed from the run records into results/summary.json.
+"""Every summary number and paired test, computed from the run records into results/summary.json (the
+tutorial's and publishers' values, quoted in this file, are stored next to them for comparison).
 
     python analysis/summarize.py          (no GPU)
 """
@@ -613,7 +614,7 @@ def architecture():
 # ------------------------------------------------------------------------------- compute
 def compute():
     """Recorded GPU time: nanolm's eval/train times and lm_eval's total evaluation time per run (runs
-    shared the GPU up to four at a time, so these overlap and sum to more than the elapsed time)."""
+    shared the GPU up to three at a time, so these overlap and sum to more than the elapsed time)."""
     ft = {k: sum(json.loads(open(f).read())["train_time_sec"] for f in glob.glob(str(RUNS / k / "*_s*" / "metrics.json")))
           for k in ("sft", "dpo")}
     n_ft = {k: len(glob.glob(str(RUNS / k / "*_s*" / "metrics.json"))) for k in ("sft", "dpo")}
